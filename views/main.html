@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtucan | Página principal</title>
+    <link rel="stylesheet" href="/deps/css/main.css">
+    <script type="module" src="/deps/js/main.js"></script>
+</head>
+<body>
+    <form method="post" class="formulario">
+        <input type="text" name="email" id="inp_email" placeholder="Email (opcional)">
+        <select name="motivo" id="inp_motivo">
+            <option value="queja">Queja</option>
+            <option value="sugerencia">Sugerencia</option>
+            <option value="otro">Otro</option>
+        </select>
+        <select name="ambito" id="inp_queja">
+            <option value="general">General</option>
+            <option value="asignatura">Asignatura Concreta</option>
+        </select>
+        <select name="asignatura" id="inp_asignatura">
+            <option value="SRD">SRD</option>
+            <option value="SGY">SGY</option>
+            <option value="ADE">ADE</option>
+            <option value="ADD">ADD</option>
+            <option value="IMW">IMW</option>
+            <option value="EMR">EMR</option>
+        </select>
+        <input type="text" name="titulo" id="inp_titulo" placeholder="Título">
+        <textarea name="cuerpo" id="inp_cuerpo" placeholder="Escribe aquí algo..."></textarea>
+        <button type="button">
+            Enviar
+        </button>
+    </form>
+</body>
+</html>
