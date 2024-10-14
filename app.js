@@ -14,8 +14,10 @@ app.disable("x-powered-by");
 
 app.use("/deps", DepsRouter);
 
+app.get("/favicon.ico", (req,res) => res.sendFile("virtucan.png", { root: "./public" }));
+
 app.get("/", (req, res) =>{
-    res.sendFile("main.html", {root: "./views"});
+    res.sendFile("quejas.html", {root: "./views"});
 });
 
 app.use("/queja", QuejaRouter);
