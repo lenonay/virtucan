@@ -1,6 +1,10 @@
+import { LocalDB } from "../models/local.js";
+
 export class QuejaController {
     static async register(req, res){
         
-        res.json(req.body);
+        const response = await LocalDB.register(req.body);
+
+        res.send(response);
     }
 }
