@@ -2,16 +2,20 @@
 const $motivo = document.querySelector("#inp_motivo");
 const $queja = document.querySelector("#inp_queja");
 const $asignatura = document.querySelector("#inp_asignatura");
+const $body = document.querySelector("#inp_cuerpo");
+const $email = document.querySelector("#inp_email");
 
+const input = document.querySelector("#inp_btn");
 const formulario = document.querySelector(".formulario");
 
-// EVENTOS
-formulario.addEventListener("submit", e =>{
-    e.preventDefault();
-});
+const dominio = document.location;
 
+
+// EVENTOS
+formulario.addEventListener("submit", SendDataToServer);
 $motivo.addEventListener("change", HideExtraOptions);
 $queja.addEventListener("change", HideAsignments);
+input.addEventListener("click", SendDataToServer);
 
 // FUNCIONES
 function HideExtraOptions(event){
@@ -32,4 +36,31 @@ function HideAsignments(event){
     }else{
         $asignatura.style.display = "none";
     }
+}
+
+async function SendDataToServer(event){
+    event.preventDefault();
+
+    const response = await fetch(`${dominio}queja/register`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: $email.value,
+            motivo: $motivo.value,
+            queja: $queja.value,
+            asignatura: $asignatura.value,
+            cuerpo: $body.value
+        })
+    }).then( response => {
+        if (response.ok){
+            return response.json();
+        }else {
+            return { status: "error", error: "Cannot connect to the server" };
+        }
+    });
+
+    console.log(response);
+
 }

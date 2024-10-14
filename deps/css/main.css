@@ -5,7 +5,6 @@
     --dark: #263849;
     --dark_blue: #222b48;
     --alert: #C11919;
-    --blue: #4fd6cf;
 }
 
 body {
@@ -59,4 +58,44 @@ select {
     resize: none;
     min-width: 200px;
     min-height: 300px;
+    border: 2px solid var(--green);
+    border-radius: 10px;
+}
+
+#inp_btn {
+    position: relative;
+    background: var(--green);
+    padding: 8px 12px;
+    border: none;
+    border-radius: 15px;
+    color: #000000;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 5;
+}
+
+#inp_btn > span {
+    position: relative;
+    z-index: 7;
+}
+
+#inp_btn::after {
+    position: absolute;
+    content: "";
+    top: 50%;       
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100px;
+    height: 100px;
+    background: var(--light);
+    clip-path: circle(0%);
+    z-index: 6;
+    transition: all 300ms ease;
+    overflow: hidden;
+}
+
+#inp_btn:hover::after{
+    clip-path: circle(100%);
 }
