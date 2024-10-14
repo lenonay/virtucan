@@ -1,11 +1,9 @@
-import { configDotenv } from "dotenv";
 import express, { json } from 'express'
 import { DepsRouter } from "./routes/deps.js";
 import { QuejaRouter } from "./routes/quejas.js";
+import { PORT } from './config.js';
 
 // Inicialiazamo el proceso
-configDotenv();
-const PORT = process.env.PORT ?? 80;
 
 const app = express();
 
