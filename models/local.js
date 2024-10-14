@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import { ValidateQueja } from "../utils/validate.js";
+import { EnviarMail } from "./mail.js";
 
 const pwd = process.cwd();
 
@@ -19,6 +20,8 @@ export class LocalDB {
         fs.writeFile(`${pwd}/logs/quejas.txt`, log, { flag: "a+" });
 
         // Enviar el correo
-        return body;
+        EnviarMail(body);
+
+        return { pinga: "OK" }
     }
 }
