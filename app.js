@@ -12,14 +12,14 @@ app.disable("x-powered-by");
 
 app.use("/deps", DepsRouter);
 
-app.get("/favicon.ico", (req,res) => res.sendFile("virtucan.png", { root: "./public" }));
+app.get("/favicon.ico", (req, res) => res.sendFile("virtucan.png", { root: "./public" }));
 
-app.get("/", (req, res) =>{
-    res.sendFile("quejas.html", {root: "./views"});
+app.get("/", (req, res) => {
+    res.sendFile("quejas.html", { root: "./views" });
 });
 
 app.use("/queja", QuejaRouter);
 
-app.listen(PORT, () =>{
-    console.log("Server is listening on port: ",PORT);
+app.listen(PORT, () => {
+    console.log("Server is listening on port: ", PORT);
 })

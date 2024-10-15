@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { MAIL, MAIL_PASS, PERS_MAIL } from "../config.js"
+import { GenerateHTML } from "../utils/createHTML.js";
 
 const transport = nodemailer.createTransport({
     host: "ssl0.ovh.net",
@@ -11,15 +12,21 @@ const transport = nodemailer.createTransport({
     }
 });
 
-export function EnviarMail(cuerpo){
+export function EnviarMail(cuerpo) {
     try {
+        const html = GenerateHTML(cuerpo);
+
         transport.sendMail({
             from: MAIL,
             to: PERS_MAIL,
             subject: `${cuerpo.motivo} | ${cuerpo.queja}`,
-            text: cuerpo.cuerpo
+            html: html
         });
+
+        // Devolver estatus
     } catch (e) {
-        console.log(e);
-    } 
+        // Devolver error
+        return { status: "error", error: "Email cannot send" , msg: e }
+    }
+    return { status: "OK", msg: "Email send" }
 }

@@ -22,14 +22,14 @@ $motivo.addEventListener("change", HideExtraOptions);
 $queja.addEventListener("change", HideAsignments);
 
 // FUNCIONES
-function HideExtraOptions(event){
+function HideExtraOptions(event) {
     // Ocultamos las opciones que no sean necesarias
-    if ($motivo.value === "otro"){
+    if ($motivo.value === "otro") {
         $queja.style.display = "none";
         $asignatura.style.display = "none";
-    }else{
+    } else {
         //  mostramos la asigntaura 
-        if($queja.value === "asignatura"){
+        if ($queja.value === "asignatura") {
             $asignatura.style.display = "block";
         }
         // mostramos la queja
@@ -37,15 +37,15 @@ function HideExtraOptions(event){
     }
 }
 
-function HideAsignments(event){
-    if($queja.value === "asignatura"){
+function HideAsignments(event) {
+    if ($queja.value === "asignatura") {
         $asignatura.style.display = "block";
-    }else{
+    } else {
         $asignatura.style.display = "none";
     }
 }
 
-async function SendDataToServer(event){
+async function SendDataToServer(event) {
     event.preventDefault();
 
     // Construimos el JSON del cuerpo
@@ -59,14 +59,14 @@ async function SendDataToServer(event){
     }
 
     // Añadimos o quitamos cosas en función de las opción elegidas
-    switch(true){
+    switch (true) {
         case $motivo.value === "otro":
             delete data.queja;
             delete data.asignatura;
-        break;
+            break;
         case $queja.value === "general":
             delete data.asignatura;
-        break;
+            break;
     }
 
     // Hacemos la petición al endpoint
@@ -76,10 +76,10 @@ async function SendDataToServer(event){
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
-    }).then( response => {
-        if (response.ok){
+    }).then(response => {
+        if (response.ok) {
             return response.json();
-        }else {
+        } else {
             return { status: "error", error: "Cannot connect to the server" };
         }
     });
