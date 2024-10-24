@@ -28,7 +28,9 @@ body {
     gap: 15px;
 }
 
-input,textarea, select {
+input,
+textarea,
+select {
     outline: none;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 18px;
@@ -42,7 +44,9 @@ input,textarea, select {
     transition: all 300ms ease;
 }
 
-input:focus,textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
     border-bottom: 2px solid var(--light);
 }
 
@@ -76,7 +80,7 @@ select {
     z-index: 5;
 }
 
-#inp_btn > span {
+#inp_btn>span {
     position: relative;
     z-index: 7;
 }
@@ -84,9 +88,9 @@ select {
 #inp_btn::after {
     position: absolute;
     content: "";
-    top: 50%;       
+    top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     width: 100px;
     height: 100px;
     background: var(--light);
@@ -96,6 +100,71 @@ select {
     overflow: hidden;
 }
 
-#inp_btn:hover::after{
+#inp_btn:hover::after {
     clip-path: circle(100%);
+}
+
+.drop-area {
+    border: 1.5px dashed var(--green);
+    width: 90%;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    transition: all 300ms ease;
+
+
+
+    & .add_file {
+        position: relative;
+        z-index: 4;
+        border: none;
+        background: var(--green);
+        color: black;
+        padding: 5px 8px;
+        font-weight: 600;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 300ms ease;
+        overflow: hidden;
+
+        & span {
+            z-index: 6;
+            position: relative;
+        }
+
+        &::after{
+            content: "";
+            position: absolute;
+            z-index: 5;
+            top: 50%;
+            left: -10px;
+            transform: translate(-50%,-50%);
+            width: 10px;
+            height: 50px;
+            background: var(--light);
+            transition: all 300ms ease;
+        }
+
+        &:hover::after {
+            width: 300px;
+        }
+    }
+}
+
+.drop-area.active {
+    border: 2px dashed var(--light);
+    background: #90f6d730;
+}
+
+.attachments {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
 }
