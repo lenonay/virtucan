@@ -25,6 +25,8 @@ export class LocalDB {
         // Enviar el correo
         const MailResult = EnviarMail(body);
 
+        // Borrar los ficheros
+        
         return MailResult;
     }
 }

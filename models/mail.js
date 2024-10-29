@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
-import { MAIL, MAIL_PASS, PERS_MAIL } from "../config.js"
+import fs from "node:fs";
+
+import { MAIL, MAIL_PASS, PERS_MAIL, UPLOAD_ROUTE } from "../config.js"
 import { GenerateHTML } from "../utils/createHTML.js";
 
 const transport = nodemailer.createTransport({
@@ -16,17 +18,29 @@ export function EnviarMail(cuerpo) {
     try {
         const html = GenerateHTML(cuerpo);
 
+        const { files } = cuerpo;
+
+        let attachments = [];
+
+        if (files) {
+            for (const file of files) {
+                attachments.push({
+                    path: `./uploads/${file}`
+                });
+            }
+        }
+
         transport.sendMail({
             from: MAIL,
             to: PERS_MAIL,
             subject: `${cuerpo.motivo} | ${cuerpo.queja}`,
-            html: html
+            html: html,
+            attachments,
         });
 
-        // Devolver estatus
     } catch (e) {
         // Devolver error
-        return { status: "error", error: "Email cannot send" , msg: e }
+        return { status: "error", error: "Email cannot send", msg: e }
     }
     return { status: "OK", msg: "Email send" }
 }

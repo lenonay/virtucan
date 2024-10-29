@@ -37,6 +37,9 @@ export function GenerateHTML(data) {
                 <tr>
                     <th style="padding: 10px;" colspan="3">${mail}</th>
                 </tr>
+                <tr>
+                    <th style="padding: 10px;" colspan="3">${data.user}</th>
+                </tr>
             </thead>
             <tbody style="width: 100%;">
                 ${html}

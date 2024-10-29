@@ -171,6 +171,11 @@ async function SendDataToServer(event) {
             break;
     }
 
+    const files = GetAttachedFiles();
+    if (files){
+        data.files = files;
+    }
+
     // Hacemos la petición al endpoint
     const response = await fetch(`${dominio}queja/register`, {
         method: "POST",
@@ -202,5 +207,13 @@ function GetAttachedFiles(){
         return null
     }
 
-    let 
+    let files_names = [];
+
+    for(const file of attached){
+        if(file.querySelector(".check")){
+            files_names.push(file.getAttribute("filename"));
+        }
+    }
+
+    return files_names;
 }

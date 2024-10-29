@@ -11,5 +11,6 @@ export const {
 
 export const allowed_exts = [
     "jpg", "png",
-    "jpeg", "gif"
+    "jpeg", "gif",
+    "pdf"
 ]
