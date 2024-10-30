@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) =>{
-    const extension = path.extname(file.originalname).slice(1);
+    const extension = path.extname(file.originalname).slice(1).toLowerCase();
 
     if(!allowed_exts.some(ext => extension.includes(ext))){
         return cb(new Error("Extension Invalida"), false);
