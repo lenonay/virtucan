@@ -14,7 +14,7 @@ const transport = nodemailer.createTransport({
     }
 });
 
-export function EnviarMail(cuerpo) {
+export async function EnviarMail(cuerpo) {
     try {
         const html = GenerateHTML(cuerpo);
 
@@ -25,12 +25,12 @@ export function EnviarMail(cuerpo) {
         if (files) {
             for (const file of files) {
                 attachments.push({
-                    path: `./uploads/${file}`
+                    path: `${process.cwd()}/uploads/${file}`
                 });
             }
         }
 
-        transport.sendMail({
+        await transport.sendMail({
             from: MAIL,
             to: PERS_MAIL,
             subject: `${cuerpo.motivo} | ${cuerpo.queja}`,
