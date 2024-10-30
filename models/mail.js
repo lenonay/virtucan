@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import fs from "node:fs";
 
 import { MAIL, MAIL_PASS, PERS_MAIL, UPLOAD_ROUTE } from "../config.js"
 import { GenerateHTML } from "../utils/createHTML.js";
@@ -25,7 +24,7 @@ export async function EnviarMail(cuerpo) {
         if (files) {
             for (const file of files) {
                 attachments.push({
-                    path: `${process.cwd()}/uploads/${file}`
+                    path: `${UPLOAD_ROUTE}${file}`
                 });
             }
         }
