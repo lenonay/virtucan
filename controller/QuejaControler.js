@@ -11,6 +11,7 @@ export class QuejaController {
 
         const response = await LocalDB.register(req.body, ip);
 
+        // Borrar los archivos
         if (files) {
             for (const file of files) {
                 const path = process.cwd() + "/uploads/" + file;

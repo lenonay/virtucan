@@ -147,7 +147,8 @@ async function UploadFile(file) {
 }
 
 async function SendDataToServer(event) {
-    event.preventDefault();
+    input.removeEventListener("click", SendDataToServer);
+    formulario.removeEventListener("click", SendDataToServer);
 
     // Construimos el JSON del cuerpo
     let data = {
@@ -172,7 +173,7 @@ async function SendDataToServer(event) {
     }
 
     const files = GetAttachedFiles();
-    if (files){
+    if (files) {
         data.files = files;
     }
 
@@ -196,21 +197,24 @@ async function SendDataToServer(event) {
     // Temporal
     console.log(response);
 
+    // Volvemos a activar el evento
+    formulario.addEventListener("submit", SendDataToServer);
+    input.addEventListener("click", SendDataToServer);
 }
 
-function GetAttachedFiles(){
+function GetAttachedFiles() {
     // Obtenemos los ficheros adjuntos
     const attached = area.querySelectorAll(".preview");
 
     // Si no hay retornar null
-    if(!attached){
+    if (!attached) {
         return null
     }
 
     let files_names = [];
 
-    for(const file of attached){
-        if(file.querySelector(".check")){
+    for (const file of attached) {
+        if (file.querySelector(".check")) {
             files_names.push(file.getAttribute("filename"));
         }
     }
