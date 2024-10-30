@@ -1,4 +1,7 @@
 import fs from "node:fs/promises";
+import fsSync from "node:fs";
+
+import { UPLOAD_ROUTE } from "../config.js";
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
 
@@ -6,6 +9,8 @@ const pwd = process.cwd();
 
 export class LocalDB {
     static async register(body, ip) {
+
+        const { files } = body;
 
         // Validamos el cuerpo para evitar fugas
         const validate = ValidateQueja(body);
@@ -23,10 +28,10 @@ export class LocalDB {
         fs.writeFile(`${pwd}/logs/quejas.txt`, log, { flag: "a+" });
 
         // Enviar el correo
-        const MailResult = EnviarMail(body);
+        const MailResult = await EnviarMail(body);
 
         // Borrar los ficheros
-        
+
         return MailResult;
     }
 }
