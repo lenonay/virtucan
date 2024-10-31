@@ -1,4 +1,5 @@
 // ELEMENTOS
+// Campos del formulario
 const $motivo = document.querySelector("#inp_motivo");
 const $queja = document.querySelector("#inp_queja");
 const $asignatura = document.querySelector("#inp_asignatura");
@@ -7,13 +8,16 @@ const $email = document.querySelector("#inp_email");
 const $titulo = document.querySelector("#inp_titulo");
 const $files = document.querySelector("#inp_file");
 
+// HTML Elements
 const input = document.querySelector("#inp_btn");
 const upload_btn = document.querySelector(".add_file");
 const formulario = document.querySelector(".formulario");
 const area = document.querySelector(".drop-area");
 
+// Dominio actual
 const dominio = document.location;
 
+// Obtenemos el usario del localstorage o lo generamos
 const user = localStorage.getItem("user") ?? GenerateUser();
 
 // EVENTOS
@@ -46,8 +50,10 @@ function HideExtraOptions(event) {
 }
 
 function HideAsignments(event) {
+    // Si la queja es referente a una asginatura la mostramos
     if ($queja.value === "asignatura") {
         $asignatura.style.display = "block";
+        // Sino ocultamos las asginaturas
     } else {
         $asignatura.style.display = "none";
     }
@@ -55,40 +61,53 @@ function HideAsignments(event) {
 
 function GenerateUser() {
     let resultado = "";
+    // String con los posibles caracteres
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const chars_length = chars.length;
 
+    // Obtenemos una serie de 8 caracteres random 
     for (let i = 0; i <= 8; i++) {
         resultado += chars.charAt(Math.floor(Math.random() * chars_length));
     }
 
+    // Añadimos user- más los caracteres random
     resultado = "user-" + resultado;
 
+    // Lo guardamos en el localstorage
     localStorage.setItem("user", resultado);
 
+    // devolvemos el usuario 
     return resultado;
 }
 
 function ProccessFiles(event) {
+    // Obtenemos todos los ficheros
     const files = $files.files;
 
+    // Si no hay salimos
     if (!files) {
         return;
     }
 
+    // Si hay los interamos para subirlos individualemente.
     for (const file of files) {
         UploadFile(file);
     }
 }
 
 async function UploadFile(file) {
+    // Sacamos el nombre y el peso del archivo
     const { name, size } = file;
 
+    // Instanciamos un Filereader
     const reader = new FileReader();
 
+    // Capturamos el evento de finalizar la lectura
     reader.addEventListener("load", async () => {
+        // Creamos un id random
         const id = Math.random().toString(16).replace(/0\./, "id-");
 
+        // Creamos la vista previa del elemento con un loader
         const card = `
             <div class="preview" id="${id}">
                 <img src ="${reader.result}">
@@ -99,12 +118,15 @@ async function UploadFile(file) {
             </div>
         `;
 
+        // Insertamos el elemento en el area de subidos
         area.insertAdjacentHTML("beforeend", card);
+        // Recuperamos el elemento subido y el loader
         const upl_file = document.querySelector(`#${id}`);
         const loader = upl_file.querySelector(".loader");
 
         // Validamos el peso
         if (size > 2000000) {
+            // Si el peso supera 2MB ponemos error en el loader y salimos
             loader.classList.remove("loader");
             loader.classList.add("xmark");
 
@@ -113,18 +135,22 @@ async function UploadFile(file) {
             return
         }
 
+        // Instanciamos un formulario
         const form = new FormData();
 
+        // Le añadimos el fichero
         form.append("file", file);
 
+        // Hacemos la peticion al servidor
         const response = await fetch(`${dominio}upload`, {
             method: "POST",
             body: form
         });
 
+        // Esperamos la respuesta
         const result = (response.ok) ? await response.json() : undefined;
 
-        // Si el servidor muere por el camino
+        // Si el servidor muere por el camino mostramos error
         if (!result) {
             loader.classList.remove("loader");
             loader.classList.add("xmark");
@@ -132,6 +158,7 @@ async function UploadFile(file) {
             return
         }
 
+        // Si tenemos un error lo mostramos
         if (result.error) {
             loader.classList.remove("loader");
             loader.classList.add("xmark");
@@ -141,26 +168,27 @@ async function UploadFile(file) {
             return
         }
 
-        // Añadimos el nombre del fichero como atributo
-
+        
+        // Añadimos el nombre del fichero que usó el servidor para guardarlo como atributo
         upl_file.setAttribute("filename", result.filename);
 
+        // Cambiamos el loader a un chech verde
         loader.classList.remove("loader");
         loader.classList.add("check");
-    })
+    });
 
+    // Leemos el fichero si hay
     if (file) {
         reader.readAsDataURL(file)
     }
-
-
 }
 
 async function SendDataToServer(event) {
+    // Quitamos los eventos temporalmente para que no se puedan mandar varios emails a la vez
     input.removeEventListener("click", SendDataToServer);
     formulario.removeEventListener("click", SendDataToServer);
 
-    // Construimos el JSON del cuerpo
+    // Construimos el JSON del cuerpo con los elementos del formulario
     let data = {
         user: user,
         email: $email.value,
@@ -182,7 +210,9 @@ async function SendDataToServer(event) {
             break;
     }
 
+    // Obtenemos los ficheros adjuntos
     const files = GetAttachedFiles();
+    // Si los hay añadimos un array con el nombre de cada uno
     if (files) {
         data.files = files;
     }
@@ -221,13 +251,17 @@ function GetAttachedFiles() {
         return null
     }
 
+    // Inicializamos un array
     let files_names = [];
 
+    // Iteramos por cada archivo
     for (const file of attached) {
+        // Si tiene un check añadimos el nombre al array
         if (file.querySelector(".check")) {
             files_names.push(file.getAttribute("filename"));
         }
     }
 
+    // Devolvemos el array de nombres
     return files_names;
 }
