@@ -12,19 +12,19 @@ export function ValidateQueja(body){
         }
     }
 
-    if(!cuerpo){
-        return { 
-            status: "error", 
-            tag: "#inp_body", 
-            error: "El cuerpo no puede estar vacío" 
-        }
-    }
-
     if(!titulo){
         return {
             status: "error",
             tag: "#inp_titulo",
             error: "El titulo es obligatorio"
+        }
+    }
+
+    if(!cuerpo){
+        return { 
+            status: "error", 
+            tag: "#inp_cuerpo", 
+            error: "El cuerpo no puede estar vacío" 
         }
     }
 

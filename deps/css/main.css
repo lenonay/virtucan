@@ -8,6 +8,11 @@
     --sombra_azul: #35bcbf30;
 }
 
+* {
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 body {
     background: var(--dark);
     display: flex;
@@ -27,6 +32,8 @@ body {
     justify-content: center;
     align-items: center;
     gap: 15px;
+    width: 310px;
+    overflow: auto;
 }
 
 input,
@@ -45,9 +52,26 @@ select {
     transition: all 300ms ease;
 }
 
+textarea {
+    border: 2px solid var(--green);
+}
+
+textarea:focus {
+    border: 2px solid var(--light);
+}
+
 input:focus,
 select:focus {
     border-bottom: 2px solid var(--light);
+}
+
+input.wrong_value,
+select.wrong_value {
+    border-bottom: 2px solid var(--alert);
+}
+
+textarea.wrong_value {
+    border: 2px solid var(--alert);
 }
 
 select {
@@ -62,7 +86,6 @@ select {
     resize: none;
     min-width: 200px;
     min-height: 300px;
-    border: 2px solid var(--green);
     border-radius: 10px;
 }
 
@@ -236,6 +259,7 @@ select {
 }
 
 .check {
+    box-sizing: content-box;
     display: inline-block;
     transform: rotate(45deg);
     height: 17px;
@@ -248,4 +272,20 @@ select {
     content: '\2716';
     font-size: 30px;
     color: var(--alert);
+}
+
+.error {
+    color: aliceblue;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: -10px;
+
+    & span {
+        color: var(--alert);
+        letter-spacing: 1px;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
 }
