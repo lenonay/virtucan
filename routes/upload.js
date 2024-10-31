@@ -13,19 +13,26 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const suffix = Math.random().toString(16).replace(/0\./, "file-");
         const ext = path.extname(file.originalname);
-        cb(null, suffix+ext);
+        cb(null, suffix + ext);
     },
 });
 
-const fileFilter = (req, file, cb) =>{
+const fileFilter = (req, file, cb) => {
+
+    // Revisar peso
+    const size = req.headers["content-length"];
+    
+    if( size > 2000000) {
+        return cb(new Error("Peso excedido", false));
+    }
+
     const extension = path.extname(file.originalname).slice(1).toLowerCase();
 
-    if(!allowed_exts.some(ext => extension.includes(ext))){
+    if (!allowed_exts.some(ext => extension.includes(ext))) {
         return cb(new Error("Extension Invalida"), false);
     }
-    else{
-        cb(null,true);
-    }
+
+    cb(null, true);
 }
 
 const upload = multer({ storage, fileFilter });

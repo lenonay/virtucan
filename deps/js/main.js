@@ -82,7 +82,8 @@ function ProccessFiles(event) {
 }
 
 async function UploadFile(file) {
-    const { name } = file;
+    const { name, size } = file;
+
     const reader = new FileReader();
 
     reader.addEventListener("load", async () => {
@@ -99,6 +100,18 @@ async function UploadFile(file) {
         `;
 
         area.insertAdjacentHTML("beforeend", card);
+        const upl_file = document.querySelector(`#${id}`);
+        const loader = upl_file.querySelector(".loader");
+
+        // Validamos el peso
+        if (size > 2000000) {
+            loader.classList.remove("loader");
+            loader.classList.add("xmark");
+
+            console.log("Peso máximo 2000000");
+
+            return
+        }
 
         const form = new FormData();
 
@@ -110,9 +123,6 @@ async function UploadFile(file) {
         });
 
         const result = (response.ok) ? await response.json() : undefined;
-
-        const upl_file = document.querySelector(`#${id}`);
-        const loader = upl_file.querySelector(".loader");
 
         // Si el servidor muere por el camino
         if (!result) {
