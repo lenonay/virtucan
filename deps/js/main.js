@@ -13,6 +13,7 @@ const input = document.querySelector("#inp_btn");
 const upload_btn = document.querySelector(".add_file");
 const formulario = document.querySelector(".formulario");
 const area = document.querySelector(".drop-area");
+const panel_btn = document.querySelector(".panel");
 
 // Dominio actual
 const dominio = document.location;
@@ -31,7 +32,12 @@ $queja.addEventListener("change", HideAsignments);
 
 // Subir archivos
 upload_btn.addEventListener("click", () => { $files.click(); });
-$files.addEventListener("change", ProccessFiles)
+$files.addEventListener("change", ProccessFiles);
+
+panel_btn.addEventListener("click", () => {
+    // Redirigimos al login
+    window.location = "/login";
+});
 
 // FUNCIONES
 function HideExtraOptions(event) {
