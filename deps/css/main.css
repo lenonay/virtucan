@@ -131,6 +131,27 @@ select {
     clip-path: circle(100%);
 }
 
+.normas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    color: #ededed;
+    font-size: 14px;
+
+    & .signo {
+        font-weight: 700;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        border: 1.5px solid #ededed;
+
+    }
+}
+
 .drop-area {
     border: 1.5px dashed var(--green);
     width: 90%;
