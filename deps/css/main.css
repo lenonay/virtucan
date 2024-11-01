@@ -324,3 +324,90 @@ select {
     align-items: center;
     gap: 8px;
 }
+
+@media screen and (width >= 1000px) {
+    .formulario {
+        width: 800px;
+        display: grid;
+        grid-template-areas:
+            "error error"
+            "email normas"
+            "motivo adjuntos"
+            "queja adjuntos"
+            "asignatura adjuntos"
+            "titulo titulo"
+            "cuerpo cuerpo"
+            "enviar enviar"
+        ;
+    }
+
+    #inp_email {
+        grid-area: email;
+    }
+
+    #inp_motivo {
+        grid-area: motivo;
+    }
+
+    #inp_queja {
+        grid-area: queja;
+    }
+
+    #inp_asignatura {
+        grid-area: asignatura;
+    }
+
+    #inp_titulo {
+        grid-area: titulo;
+    }
+
+    #inp_cuerpo {
+        grid-area: cuerpo;
+    }
+
+    #inp_btn {
+        grid-area: enviar;
+    }
+
+    #inp_btn::after {
+        width: 800px;
+    }
+
+    .normas {
+        grid-area: normas;
+    }
+
+    .sending {
+        grid-area: error;
+    }
+
+    .drop-area {
+        grid-area: adjuntos;
+        width: 100%;
+        height: 100px;
+        overflow: scroll;
+        justify-content: flex-start;
+
+        & .add_file {
+            height: 27px;
+            overflow: visible;
+
+            &:hover {
+                background-color: var(--light);
+            }
+
+            &::after {
+                content: none;
+            }
+        }
+
+        & .preview {
+            height: 48px;
+            overflow: visible;
+        }
+    }
+
+    .error {
+        grid-area: error;
+    }
+}
