@@ -15,7 +15,6 @@ export class QuejaController {
         if (files) {
             for (const file of files) {
                 const path = process.cwd() + "/uploads/" + file;
-                console.log(path)
 
                 if(fs.existsSync(path)){
                     fs.unlinkSync(path);

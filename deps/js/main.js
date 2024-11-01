@@ -110,7 +110,7 @@ async function UploadFile(file) {
         // Creamos la vista previa del elemento con un loader
         let visual = Gen_SVG(35);
 
-        if(type.includes("image")){
+        if (type.includes("image")) {
             visual = `<img src ="${reader.result}"></img>`;
         }
 
@@ -223,6 +223,29 @@ async function SendDataToServer(event) {
         data.files = files;
     }
 
+    // Creamos un loader y para enviarlo
+    const html = `
+        <div class="sending">
+            <span>Enviando queja</span>
+            <div class="upload_status">
+                <div class="loader"></div>
+            </div>
+        </div>`
+        ;
+
+    // Borramos si hay error
+    if (document.querySelector(".error")) {
+        document.querySelector(".error").remove();
+    }
+
+    // Borramos si ya habia un mensaje
+    if (document.querySelector(".sending")) {
+        document.querySelector(".sending").remove();
+    }
+
+    formulario.insertAdjacentHTML("afterbegin", html);
+    document.documentElement.scrollTop = 0;
+
     // Hacemos la petición al endpoint
     const response = await fetch(`${dominio}queja/register`, {
         method: "POST",
@@ -245,13 +268,11 @@ async function SendDataToServer(event) {
 
     if (response.status === "error") {
         ShowErrors(response);
-
         return
     }
 
-    // Mostramos la respuesta
-    // Temporal
-    console.log(response);
+    // Limpiamos el form y mostramos el exito
+    CleanForm();
 }
 
 function GetAttachedFiles() {
@@ -281,13 +302,20 @@ function GetAttachedFiles() {
 function ShowErrors(error_object) {
     const { tag, error } = error_object;
 
+    // Borramos el mensaje de enviar
+    if (document.querySelector(".sending")) {
+        document.querySelector(".sending").remove();
+    }
+
     // Borramos el error si ya hay uno
     if (document.querySelector(".error")) {
         document.querySelector(".error").remove();
     }
 
+    // Creamos el error
     const html = `<p class="error"><span>[!]</span> ${error}</p>`;
 
+    // Lo añadimos al formulario
     formulario.insertAdjacentHTML("afterbegin", html);
 
     if (tag) {
@@ -307,6 +335,43 @@ function ShowErrors(error_object) {
             element.classList.remove("wrong_value");
         }, { once: true });
     }
+
+    // Vamos al incio de la página.
+    document.documentElement.scrollTop = 0;
+}
+
+function CleanForm() {
+    // Obtenemos los elementos html
+    const sending_msg = document.querySelector(".sending");
+    const texto = sending_msg.querySelector("span");
+    const loader = sending_msg.querySelector(".loader");
+
+    // Cambiamos el texto
+    texto.textContent = "Queja enviada";
+    // Cambiamos el loader por un check
+    loader.classList.remove("loader");
+    loader.classList.add("check");
+
+    // Limpiamos todos los inputs
+    $email.value = "";
+    $titulo.value = "";
+    $body.value = "";
+
+    // Colocamos los menus desplegables
+    $motivo.value = "queja";
+    $queja.value = "general";
+
+    // Ocultamos y mostramos las opciones
+    HideAsignments();
+    HideExtraOptions();
+
+    // Obtenemos todos los adjuntos
+    const previews = document.querySelectorAll(".preview");
+
+    // Los iteramos y los borramos
+    previews.forEach(preview =>{
+        preview.remove();
+    });
 }
 
 function Gen_SVG(size) {
