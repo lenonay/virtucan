@@ -1,8 +1,10 @@
 import express, { json } from 'express'
+
 import { DepsRouter } from "./routes/deps.js";
 import { QuejaRouter } from "./routes/quejas.js";
 import { PORT } from './config.js';
 import { UploadsRouter } from './routes/upload.js';
+import { LoginRouter } from './routes/login.js';
 
 // Inicialiazamo el proceso
 
@@ -20,6 +22,8 @@ app.get("/favicon.ico", (req, res) => res.sendFile("virtucan.png", { root: "./pu
 app.get("/", (req, res) => {
     res.sendFile("quejas.html", { root: "./views" });
 });
+
+app.use("/login", LoginRouter)
 
 app.use("/queja", QuejaRouter);
 

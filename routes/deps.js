@@ -12,6 +12,10 @@ DepsRouter.get("/css/main.css", (req, res) =>{
     }
 });
 
+DepsRouter.get("/css/login.css", (req, res) => {
+    res.sendFile("css/login.css", { root: "./deps" });
+});
+
 DepsRouter.get("/js/main.js", (req, res) =>{
     try {
         res.sendFile("js/main.js",{root: "./deps"});
