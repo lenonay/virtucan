@@ -25,3 +25,7 @@ DepsRouter.get("/js/main.js", (req, res) =>{
         });
     }
 });
+
+DepsRouter.get("/js/login.js", (req, res) => {
+    res.sendFile("js/login.js" , { root: "./deps" });
+})
