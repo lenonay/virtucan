@@ -20,10 +20,14 @@ export class LocalDB {
 
         const DBuser = users.find((entry) => entry.user === user);
 
-        if(!bcrypt.compareSync(passwd, DBuser.passwd)){
-            return { status: "error", error: "contraseña invalida" }
+        if(!DBuser){
+            return { status: "error", msg: "El usuario no existe" }
         }
 
-        return { status: "OK", erorr: "usuario existente" }
+        if(!bcrypt.compareSync(passwd, DBuser.passwd)){
+            return { status: "error", msg: "contraseña invalida" }
+        }
+
+        return { status: "OK", msg: "usuario existente" }
     }
 }
