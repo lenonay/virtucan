@@ -6,7 +6,8 @@ export const {
     MAIL,
     MAIL_PASS,
     PERS_MAIL,
-    UPLOAD_ROUTE
+    UPLOAD_ROUTE,
+    DEFAULT_USER
 } = process.env;
 
 export const allowed_exts = [
