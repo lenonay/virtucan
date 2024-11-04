@@ -42,7 +42,12 @@ export class LocalDB {
             return { status: "error", msg: "contraseña invalida" }
         }
 
+        const user_data = {
+            user: DBuser.user,
+            priv: DBuser.priv
+        }
+
         // Caso contrario existe retornamos OK
-        return { status: "OK", msg: "usuario existente", user_data: DBuser }
+        return { status: "OK", msg: "usuario existente", user_data: user_data }
     }
 }

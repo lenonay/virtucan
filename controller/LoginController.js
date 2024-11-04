@@ -20,11 +20,8 @@ export class LoginController {
             res.send({ status: "error", error: "Usuario o contraseña inválida" });
         }
 
-        // Extraemos el usuario y el privilegio
-        const { DBuser, DBpriv } = DBresult.user_data;
-
         // Creamos el JWT y lo firmamos
-        const token = jwt.sign({ user: DBuser, priv: DBpriv }, JWT_PASS, {
+        const token = jwt.sign(DBresult.user_data, JWT_PASS, {
             expiresIn: "1h"
         });
 

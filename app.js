@@ -1,6 +1,7 @@
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser';
 
+import { token } from './middlewares/jwt.js';
 import { DepsRouter } from "./routes/deps.js";
 import { QuejaRouter } from "./routes/quejas.js";
 import { PORT } from './config.js';
@@ -13,6 +14,8 @@ const app = express();
 
 app.use(json());
 app.use(cookieParser());
+app.use(token);
+
 app.disable("x-powered-by");
 
 app.use("/deps", DepsRouter);
