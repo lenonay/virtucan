@@ -34,6 +34,6 @@ export class LoginController {
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60
             })
-            .send({ status: "OK", msg: "correct auth" });
+            .send({ status: "OK", msg: "Atenticación correcta" })
     }
 }
