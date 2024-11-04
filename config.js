@@ -7,7 +7,8 @@ export const {
     MAIL_PASS,
     PERS_MAIL,
     UPLOAD_ROUTE,
-    DEFAULT_USER
+    DEFAULT_USER,
+    JWT_PASS
 } = process.env;
 
 export const allowed_exts = [
