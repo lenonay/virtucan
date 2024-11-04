@@ -10,6 +10,7 @@ export class LoginController {
         // si no hay lo devolvemos
         if (!user || !passwd) {
             res.send({ status: "error", error: "Se requiere usuario y contraseña" });
+            return;
         }
 
         // Revisamos si el usuario existe en la DB
@@ -18,6 +19,7 @@ export class LoginController {
         // Si hay error retornamos el error
         if (DBresult.status !== "OK") {
             res.send({ status: "error", error: "Usuario o contraseña inválida" });
+            return;
         }
 
         // Creamos el JWT y lo firmamos
@@ -27,11 +29,11 @@ export class LoginController {
 
         // Enviamos la petición y metemos el token como cookie
         res
-            .cookie("token", token,{
+            .cookie("token", token, {
                 httpOnly: true,
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60
             })
-            .send({ status: "OK" ,msg: "correct auth"});
+            .send({ status: "OK", msg: "correct auth" });
     }
 }

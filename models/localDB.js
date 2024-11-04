@@ -8,7 +8,7 @@ const db = await JSONFilePreset("./db.json", { users: [] });
 // Si no existe la colección users la añadimos
 if (!db.data.users) {
     db.data.users = [];
-    db.write();
+    await db.write();
 }
 
 // Si esta vacío metemos uno por defecto
