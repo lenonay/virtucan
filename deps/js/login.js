@@ -47,7 +47,7 @@ async function Login() {
     const Validaciones = ValidarContenidos();
     // Si hay alguna error lo mostramos y salimos
     if (Validaciones.status !== "OK") {
-        console.log(Validaciones.error);
+        ShowError(Validaciones.error);
         return
     }
 
@@ -65,5 +65,23 @@ async function Login() {
 
     const result = (response.ok) ? await response.json() : null;
 
-    console.log(result);
+    if(result.status !== "OK"){
+        ShowError(result.error);
+        return;
+    }
+
+    window.location = domain+"/../panel";
+}
+
+function ShowError(error){
+    // Construimos el mensaje
+    const html = `<p class="error"><span>[!] </span>${error}</p>`;
+
+    // Borramos el error si ya estaba creado
+    if(document.querySelector(".error")){
+        document.querySelector(".error").remove();
+    }
+
+    // Añadimos el hijo al formulario para que aparezca abajo
+    formulario.insertAdjacentHTML("beforeend", html);
 }

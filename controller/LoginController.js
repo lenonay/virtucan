@@ -2,11 +2,13 @@ import jwt from "jsonwebtoken";
 
 import { LocalDB } from "../models/localDB.js";
 import { JWT_PASS } from "../config.js";
+import { ValidateCSRF } from "../utils/ValidateCSRF.js";
 
 export class LoginController {
     static async Login(req, res) {
         // Sacamos el usuario y la constraseña del cuerpo
-        const { user, passwd } = req.body;
+        const { user, passwd, _csrf } = req.body;
+
         // si no hay lo devolvemos
         if (!user || !passwd) {
             res.send({ status: "error", error: "Se requiere usuario y contraseña" });
@@ -19,6 +21,18 @@ export class LoginController {
         // Si hay error retornamos el error
         if (DBresult.status !== "OK") {
             res.send({ status: "error", error: "Usuario o contraseña inválida" });
+            return;
+        }
+
+        // Sacamos la cookie que contiene el csrf
+        const csrf_cookie = req.cookies.csrf_token;
+
+        // Sacamos la información del token sacado del body
+        const csrf_token = ValidateCSRF(_csrf, csrf_cookie);
+
+        // Si el csrf token tiene un error lo devolvemos
+        if (csrf_token.status == "error") {
+            res.send({ status: "error", error: csrf_token.error });
             return;
         }
 
@@ -35,5 +49,6 @@ export class LoginController {
                 maxAge: 1000 * 60 * 60
             })
             .send({ status: "OK", msg: "Atenticación correcta" })
+        ;
     }
 }
