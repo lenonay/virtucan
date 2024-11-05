@@ -14,6 +14,22 @@ const domain = document.location;
 send_btn.addEventListener("click", Login);
 
 ////////////// FUNCIONES
+function GetToken() {
+    document.cookie;
+
+    if (!document.cookie) return;
+
+    const cookies = document.cookie.split(";");
+
+    const csrf_cookie = cookies.find(cookie => cookie.trim().startsWith("csrf_token="));
+
+    if(!csrf_cookie) return;
+
+    const token = csrf_cookie.split("=")[1];
+    
+    return token;
+}
+
 function ValidarContenidos() {
     if (!$user.value) {
         return { status: "error", error: "El usuario es requerido" }
@@ -25,6 +41,7 @@ function ValidarContenidos() {
 
     return { status: "OK" }
 }
+
 async function Login() {
     // Validamos ambas entradas
     const Validaciones = ValidarContenidos();
@@ -41,7 +58,8 @@ async function Login() {
         },
         body: JSON.stringify({
             user: $user.value,
-            passwd: $passwd.value
+            passwd: $passwd.value,
+            _csrf: GetToken()
         })
     });
 
