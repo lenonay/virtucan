@@ -1,12 +1,16 @@
 import express, { json } from 'express'
 import cookieParser from 'cookie-parser';
 
+// Parametros de configuracion
+import { PORT } from './config.js';
+// Middleware
 import { token } from './middlewares/jwt.js';
+// Routers
 import { DepsRouter } from "./routes/deps.js";
 import { QuejaRouter } from "./routes/quejas.js";
-import { PORT } from './config.js';
 import { UploadsRouter } from './routes/upload.js';
 import { LoginRouter } from './routes/login.js';
+import { PanelRouter } from './routes/panel.js';
 
 // Inicialiazamo el proceso
 
@@ -29,6 +33,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/login", LoginRouter)
+
+app.use("/panel", PanelRouter);
 
 app.use("/queja", QuejaRouter);
 
