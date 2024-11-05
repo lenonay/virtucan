@@ -3,6 +3,7 @@ export function authorize(req, res, next) {
     // Si tiene sesion que continue
     if (req.session) {
         next();
+        return
     }
 
     // Si el metodo es get redirigimos
@@ -13,5 +14,5 @@ export function authorize(req, res, next) {
 
     // Cualquier otro le metemos un 401
     res.status(401).send("Unauthorized");
-
+    return;
 }
