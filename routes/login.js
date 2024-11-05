@@ -6,7 +6,7 @@ import { csrf } from "../middlewares/csrf.js";
 export const LoginRouter = Router();
 
 // Middleware para generar el csrf_token
-LoginRouter.use(csrf);
+LoginRouter.get("*", csrf);
 
 LoginRouter.get("/", (req, res) => {
     res.sendFile("login.html", { root: "./views" });
