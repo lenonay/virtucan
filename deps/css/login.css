@@ -16,6 +16,10 @@
 
 }
 
+button {
+    color: black;
+}
+
 body {
     background: var(--dark);
     display: flex;

@@ -15,6 +15,10 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+button {
+    color: black;
+}
+
 body {
     background: var(--dark);
     display: flex;
