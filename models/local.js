@@ -1,9 +1,12 @@
 import fs from "node:fs/promises";
+import { JSONFilePreset } from "lowdb/node";
 
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
 
 const pwd = process.cwd();
+
+const db = await JSONFilePreset("./db.json", { quejas: [] });
 
 export class LocalDB {
     static async register(body, ip) {
@@ -17,11 +20,21 @@ export class LocalDB {
         // Recuperar el TIME
         const time = new Date();
 
-        // Formar el log
-        const log = `IP=${ip}|TIME=${time.toISOString()}|BODY=${JSON.stringify(body)}\n`;
+        // Creamos el JSON para la DB
+        const queja = {
+            user: body.user,
+            date: time.toLocaleDateString(),
+            time: time.toLocaleTimeString(),
+            email: body.email,
+            motivo: body.motivo,
+            asignatura: body.asignatura,
+            titulo: body.titulo,
+            cuerpo: body.cuerpo,
+            files: body.files
+        }
 
-        // Registar el log de la peticion
-        fs.writeFile(`${pwd}/logs/quejas.txt`, log, { flag: "a+" });
+        // Lo metemos a la db
+        await db.update(({ quejas }) => { quejas.push(queja) });
 
         // Enviar el correo
         const MailResult = await EnviarMail(body);
