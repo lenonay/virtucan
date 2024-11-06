@@ -37,3 +37,7 @@ DepsRouter.get("/js/login.js", (req, res) => {
 DepsRouter.get("/js/panel.js", (req, res) => {
     res.sendFile("js/panel.js", { root: "./deps" });
 })
+
+DepsRouter.get("/img/noni_logo.png", (req, res) => {
+    res.sendFile("img/noni_logo.png", { root: "./deps" });
+});

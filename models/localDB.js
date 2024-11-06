@@ -5,12 +5,6 @@ import { DEFAULT_USER } from "../config.js";
 
 const db = await JSONFilePreset("./db.json", { users: [] });
 
-// Si no existe la colección users la añadimos
-if (!db.data.users) {
-    db.data.users = [];
-    await db.write();
-}
-
 // Si esta vacío metemos uno por defecto
 if (db.data.users.length === 0) {
     const hash = await bcrypt.hash(DEFAULT_USER, 10);

@@ -38,7 +38,7 @@ if (!fs.existsSync("./db.json")) {
 
     // Escribimos el fichero de la DB
     fs.writeFileSync("./db.json", JSON.stringify(default_body));
-} 
+}
 // Si ya existe verficamos que tenga todas las tablas
 else {
     // Obtenemos la información
@@ -47,12 +47,12 @@ else {
     // Si no esta la tabla la añadimos
     db_tables.forEach(table => {
         // Si no esta la tabla la inicialiazmos
-        if(!data[table]){
+        if (!data[table]) {
             data[table] = [];
         }
     });
 
     // Guardamos los cambios
     fs.writeFileSync("./db.json", JSON.stringify(data));
-    
+
 }
