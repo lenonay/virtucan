@@ -86,13 +86,58 @@ body {
         box-shadow: 0 0 10px 1px #00000030;
     }
 
-    & ul {
-        list-style: none;
-    }
 }
 
 .options {
+    list-style: none;
     gap: 8px;
+
+    & button {
+        height: 60px;
+        aspect-ratio: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+
+        &.selected {
+            position: relative;
+            z-index: 4;
+            overflow: hidden;
+
+            & svg {
+                position: relative;
+                z-index: 6;
+            }
+
+            &::after {
+                content: "";
+                width: 70px;
+                height: 70px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: var(--green);
+                box-shadow: 0 0 10px 5px var(--sombra_azul);
+                clip-path: circle(0);
+                animation: agrandar 300ms forwards;
+                z-index: 5;
+
+
+            }
+        }
+    }
+}
+
+@keyframes agrandar {
+    from {
+        clip-path: circle(0)
+    }
+
+    to {
+        clip-path: circle(100%)
+    }
 }
 
 .user {
@@ -101,10 +146,6 @@ body {
         aspect-ratio: 1;
         object-fit: cover;
     }
-}
-
-.viewer {
-    grid-area: viewer;
 }
 
 .upper_msg {
@@ -140,4 +181,49 @@ body {
         font-size: 18px;
         font-weight: 600;
     }
+}
+
+.viewer {
+    grid-area: viewer;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(150px, auto));
+    grid-template-rows: auto;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+
+    & div {
+        background: var(--gray);
+        box-shadow: 0 0 10px 1px #00000030;
+        border-radius: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center ;
+    }
+}
+
+.viewer.home {
+    grid-template-areas:
+        "cont1 cont1 cont1 cont1 cont2 cont2"
+        "cont1 cont1 cont1 cont1 cont2 cont2"
+        "cont1 cont1 cont1 cont1 cont2 cont2"
+        "cont3 cont3 cont3 cont3 cont2 cont2"
+    ;
+
+    & .contenido4 {
+        display: none;
+    }
+}
+
+.contenido1 {
+    grid-area: cont1;
+}
+.contenido2 {
+    grid-area: cont2;
+}
+.contenido3 {
+    grid-area: cont3;
+}
+.contenido4 {
+    grid-area: cont4;
 }
