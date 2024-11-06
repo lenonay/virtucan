@@ -59,6 +59,9 @@ body {
     grid-area: nav;
     height: 100%;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .lat_menu {
@@ -102,4 +105,39 @@ body {
 
 .viewer {
     grid-area: viewer;
+}
+
+.upper_msg {
+    height: 100%;
+    min-width: 200px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    background: var(--gray);
+    box-shadow: 0 0 10px 1px #00000030;
+    border-radius: 30px;
+    padding: 15px 20px;
+
+    & p {
+        font-size: 24px;
+    }
+}
+
+.chat {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background: var(--green);
+    box-shadow: 0 0 10px 1px #00000030;
+    border-radius: 30px;
+    padding-inline: 20px;
+    cursor: pointer;
+
+    & span {
+        font-size: 18px;
+        font-weight: 600;
+    }
 }
