@@ -9,6 +9,13 @@ export const LoginRouter = Router();
 LoginRouter.get("*", csrf);
 
 LoginRouter.get("/", (req, res) => {
+
+    // Si ya ha iniciado sesión lo metemos al panel directo
+    if(req.session){
+        res.redirect("panel");
+        return
+    }
+
     res.sendFile("login.html", { root: "./views" });
 })
 
