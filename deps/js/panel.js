@@ -59,9 +59,11 @@ async function GetQuejasByDate(fecha) {
 
     const result = (response.ok) ? await response.json() : null;
 
-    if(result.status === "error"){
+    if (!result) { return null}
+
+    if (result.status === "error") {
         return null
-    }else{
+    } else {
         return result
     }
 }
@@ -82,9 +84,9 @@ async function HandleHomeBtn(event) {
     const quejas = await GetQuejasByDate(today_date);
 
     // Si no hay quejas guardamos eso en el contendor
-    if (quejas.length === 0 || !quejas){
+    if (quejas.length === 0 || !quejas) {
         contenedor.innerHTML = "<h3>Hoy no hay quejas</h3>"
-    }else{
+    } else {
         console.log(quejas);
         quejas.forEach(queja => {
             const { time, titulo, motivo } = queja
