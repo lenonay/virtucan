@@ -1,10 +1,8 @@
-import fs from "node:fs/promises";
 import { JSONFilePreset } from "lowdb/node";
 
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
 
-const pwd = process.cwd();
 
 const db = await JSONFilePreset("./db.json", { quejas: [] });
 
