@@ -78,7 +78,7 @@ async function HandleHomeBtn(event) {
     const quejas = await GetQuejasByDate(today_date);
 
     // Si no hay quejas guardamos eso en el contendor
-    if (quejas.length === 0){
+    if (quejas.length === 0 || !quejas){
         contenedor.innerHTML = "<h3>Hoy no hay quejas</h3>"
     }
 
