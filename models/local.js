@@ -16,13 +16,15 @@ export class LocalDB {
         }
 
         // Recuperar el TIME
-        const time = new Date();
+        const date = new Date();
+        const formatter_date = new Intl.DateTimeFormat("es-ES", { dateStyle: "short" });
+        const formatter_time = new Intl.DateTimeFormat("es-ES", { timeStyle: "short" });
 
         // Creamos el JSON para la DB
         const queja = {
             user: body.user,
-            date: time.toLocaleDateString(),
-            time: time.toLocaleTimeString(),
+            date: formatter_date.format(date),
+            time: formatter_time.format(date),
             email: body.email,
             motivo: body.motivo,
             asignatura: body.asignatura,
