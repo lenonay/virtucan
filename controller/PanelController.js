@@ -1,22 +1,23 @@
 import { JSONFilePreset } from "lowdb/node";
-const date_rgx = /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/;
+const date_rgx = /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2}$/;
 
-const db = await JSONFilePreset("./db.json", { quejas: [] });
 
 export class PanelController {
     static async QuejasByDate(req, res) {
-        const { filtro } = req.params;
+        const db = await JSONFilePreset("./db.json", { quejas: [] });
+        
+        // Recuperamos una copia de la db 
+        let quejas = db.data.quejas;
 
-        if (!date_rgx.test(filtro)){
-            res.send({status: "error", error: "La fecha no cumple el formato"});
-            return;
+        // Recogemos los filtros
+        const { fecha } = req.query;
+
+        // Si hay fecha filtramos por ella
+        if (fecha && date_rgx.test(fecha)) {
+            quejas = quejas.filter(queja => queja.date === fecha);
         }
 
-        // Recuperamos todos las quejas de esa fecha
-        const filtered_quejas = db.data.quejas.filter((queja) =>  queja.date === filtro );
-
-        // Las enviamos
-        res.send(filtered_quejas);
-        
+        // Enviamos las quejas
+        res.send(quejas);
     }
 }

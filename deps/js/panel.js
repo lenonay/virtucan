@@ -14,6 +14,10 @@ const viewer = document.querySelector(".viewer");
 const upper_msg = document.querySelector(".upper_msg");
 // Extras
 const domain = document.location;
+// Formateadores de fecha
+const DateFormatter = new Intl.DateTimeFormat("es-ES", { dateStyle: "short"});
+const TimeFormatter = new Intl.DateTimeFormat("es-ES", { timeStyle: "short"});
+
 ////////////////// EVENTOS
 btn_home.addEventListener("click", HandleHomeBtn);
 btn_quejas.addEventListener("click", HandleQuejasBtn);
@@ -53,7 +57,12 @@ function PrepareViewer(nombre, boton) {
 }
 
 async function GetQuejasByDate(fecha) {
-    const response = await fetch(`${domain}/quejas/fecha/${encodeURIComponent(fecha)}`, {
+
+    const query = new URLSearchParams({
+        fecha: fecha
+    }).toString();
+
+    const response = await fetch(`${domain}/quejas?${query}`, {
         method: "GET"
     });
 
@@ -80,7 +89,7 @@ async function HandleHomeBtn(event) {
     contenedor.classList.add("quejas_container");
 
     // Obtenemos el dia de hoy y pedimos las quejas por fecha de hoy
-    const today_date = new Date().toLocaleDateString();
+    const today_date = DateFormatter.format(new Date());
     const quejas = await GetQuejasByDate(today_date);
 
     // Si no hay quejas guardamos eso en el contendor

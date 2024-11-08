@@ -11,4 +11,4 @@ PanelRouter.get("/", (req, res) => {
     res.sendFile("panel.html", { root: "./views" });
 });
 
-PanelRouter.get("/quejas/fecha/:filtro", PanelController.QuejasByDate);
+PanelRouter.get("/quejas", PanelController.QuejasByDate);
