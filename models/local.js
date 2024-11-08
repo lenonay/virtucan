@@ -1,4 +1,6 @@
+import crypto from "node:crypto";
 import { JSONFilePreset } from "lowdb/node";
+
 
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
@@ -22,6 +24,7 @@ export class LocalDB {
 
         // Creamos el JSON para la DB
         const queja = {
+            id: crypto.randomUUID(),
             user: body.user,
             date: formatter_date.format(date),
             time: formatter_time.format(date),

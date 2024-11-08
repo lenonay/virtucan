@@ -10,14 +10,18 @@ export class PanelController {
         let quejas = db.data.quejas;
 
         // Recogemos los filtros
-        const { fecha } = req.query;
+        const { fecha, id } = req.query;
+
+        if (id){
+            quejas = quejas.filter(quejas => quejas.id === id);
+        }
 
         // Si hay fecha filtramos por ella
         if (fecha && date_rgx.test(fecha)) {
             quejas = quejas.filter(queja => queja.date === fecha);
         }
 
-        // Enviamos las quejas
+        // Enviamos las quejas filtradas
         res.send(quejas);
     }
 }

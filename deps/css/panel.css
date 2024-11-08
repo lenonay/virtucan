@@ -6,6 +6,11 @@
     --dark_blue: #222b48;
     --alert: #C11919;
     --sombra_azul: #35bcbf30;
+    --coral: #FF7F50;
+    --turquoise: #40E0D0;
+    --lightgray: #D3D3D3;
+    --navy: #000080;
+    --darkpurple: #4B0082;
 }
 
 /* svg: xnix-circular-interface-icons */
@@ -125,6 +130,7 @@ body {
 
         &.selected {
             transition: all 300ms ease;
+
             &::after {
                 clip-path: circle(100%);
             }
@@ -208,29 +214,8 @@ body {
         flex-direction: column;
         justify-content: flex-start;
 
-        .quejas_container {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-
-
-            & .queja {
-                background: var(--dark);
-                width: 100%;
-                padding: 15px 20px;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 15px;
-                border-radius: 20px;
-                box-shadow: 0 0 10px 1px #00000030;
-            }
+        h1 {
+            color: aliceblue;
         }
 
     }
@@ -240,15 +225,69 @@ body {
     }
 }
 
+.quejas_container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    max-height: 490px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    overflow-y: auto;
+
+
+    & .queja {
+        background: var(--dark);
+        width: 100%;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px 1px #00000030;
+        color: aliceblue;
+        cursor: pointer;
+
+        & span {
+            padding: 5px 8px;
+            font-weight: 500;
+        }
+
+        &>span[time] {
+            background: aliceblue;
+            border-radius: 20px;
+            color: black;
+
+        }
+
+        &>span[motivo] {
+            padding: 5px 8px;   
+            background: var(--lightgray);
+            color: black;
+            border-radius: 20px;
+        }
+
+        &>span[titulo] {
+            font-size: 18px;
+            padding: 0;
+        }
+    }
+}
+
 .viewer.quejas {
-    grid-template-areas: 
+    grid-template-areas:
         "cont1 cont1 cont1 cont1 cont1 cont2"
         "cont1 cont1 cont1 cont1 cont1 cont2"
         "cont1 cont1 cont1 cont1 cont1 cont2"
         "cont1 cont1 cont1 cont1 cont1 cont2"
     ;
 
-    .contenido3, .contenido4 {
+    .contenido3,
+    .contenido4 {
         display: none;
     }
 }

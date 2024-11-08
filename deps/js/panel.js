@@ -15,8 +15,8 @@ const upper_msg = document.querySelector(".upper_msg");
 // Extras
 const domain = document.location;
 // Formateadores de fecha
-const DateFormatter = new Intl.DateTimeFormat("es-ES", { dateStyle: "short"});
-const TimeFormatter = new Intl.DateTimeFormat("es-ES", { timeStyle: "short"});
+const DateFormatter = new Intl.DateTimeFormat("es-ES", { dateStyle: "short" });
+const TimeFormatter = new Intl.DateTimeFormat("es-ES", { timeStyle: "short" });
 
 ////////////////// EVENTOS
 btn_home.addEventListener("click", HandleHomeBtn);
@@ -68,7 +68,7 @@ async function GetQuejasByDate(fecha) {
 
     const result = (response.ok) ? await response.json() : null;
 
-    if (!result) { return null}
+    if (!result) { return null }
 
     if (result.status === "error") {
         return null
@@ -96,17 +96,17 @@ async function HandleHomeBtn(event) {
     if (!quejas || quejas.length === 0) {
         contenedor.innerHTML = "<h3>Hoy no hay quejas</h3>"
     } else {
-        console.log(quejas);
         quejas.forEach(queja => {
-            const { time, titulo, motivo } = queja
+            const { id, time, titulo, motivo } = queja
             const elemento = `
-                <div class="queja">
-                    <span>${time}</span>
-                    <span>${titulo}</span>
-                    <span>${motivo}</span>
+                <div class="queja" id='${id}'>
+                    <span time>${time}</span>
+                    <span motivo>${motivo}</span>
+                    <span titulo>${titulo}</span>
                 </div>
             `;
 
+            // Añadimos la queja al html
             contenedor.innerHTML += elemento;
         });
     }
@@ -115,11 +115,34 @@ async function HandleHomeBtn(event) {
     $cont1.appendChild(titulo);
     $cont1.appendChild(contenedor);
 
+    const $quejas = document.querySelectorAll(".queja");
+
+    $quejas.forEach(queja => {
+        queja.addEventListener("click", ShowFullQueja);
+    })
+
 }
 
 function HandleQuejasBtn(event) {
     // Preparamos la base
     PrepareViewer("quejas", btn_quejas);
+}
+
+async function ShowFullQueja(event){
+    // Recuperamos el id
+    const { id } = event.target;
+
+    const query_params = new URLSearchParams({
+        id: id
+    }).toString();
+
+    const response = await fetch(`${domain}/quejas?${query_params}`,{
+        method: "GET"
+    });
+
+    const result = (response.ok) ? await response.json() : null
+
+    console.log(result[0]);
 }
 
 //////////////// CUERPO
