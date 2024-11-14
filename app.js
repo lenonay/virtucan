@@ -12,6 +12,7 @@ import { QuejaRouter } from "./routes/quejas.js";
 import { UploadsRouter } from './routes/upload.js';
 import { LoginRouter } from './routes/login.js';
 import { PanelRouter } from './routes/panel.js';
+import { FilesRouter } from './routes/files.js';
 
 // Inicialiazamo el proceso
 // Metemos todo en bloque try catch para ver que es el error que cierra el servicio
@@ -39,6 +40,8 @@ try {
     app.use("/panel", PanelRouter);
 
     app.use("/queja", QuejaRouter);
+
+    app.use("/files", FilesRouter);
 
     app.listen(PORT, () => {
         console.log("Server is listening on port: ", PORT);
