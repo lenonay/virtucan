@@ -199,6 +199,7 @@ body {
         align-items: center;
         transition: all 300ms ease;
         padding: 20px;
+        /* position: relative; */
     }
 }
 
@@ -265,7 +266,7 @@ body {
         }
 
         &>span[motivo] {
-            padding: 5px 8px;   
+            padding: 5px 8px;
             background: var(--lightgray);
             color: black;
             border-radius: 20px;
@@ -306,4 +307,166 @@ body {
 
 .contenido4 {
     grid-area: cont4;
+}
+
+.cancel_back {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 19;
+    cursor: pointer;
+    background: #00000030;
+}
+
+.display {
+    position: absolute;
+    z-index: 20;
+    background: var(--dark);
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 80%;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 1px var(--sombra_azul);
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.queja_display {
+    padding: 10px;
+    display: grid;
+    gap: 10px;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: repeat(4, 300px);
+    grid-template-rows: repeat(4, 40px) repeat(2, 1fr);
+    grid-template-areas:
+        "timestamp timestamp att att"
+        "user email att att"
+        "types types att att"
+        "title title att att"
+        "body body att att"
+        "body body att att"
+    ;
+
+    &>* {
+        font-size: 20px;
+        color: aliceblue;
+    }
+
+    & .ds_timestamp {
+        grid-area: timestamp;
+        background: aliceblue;
+        width: fit-content;
+        height: fit-content;
+        align-self: center;
+        justify-self: center;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 18px;
+        color: black;
+        font-weight: 500;
+        box-shadow: 0 0 5px 1px #00000030;
+    }
+
+    & .ds_user,
+    .ds_email,
+    .ds_title {
+        background: none;
+        width: 100%;
+        height: fit-content;
+        border: none;
+        border-bottom: 2px solid var(--green);
+        padding: 5px 2px;
+        text-overflow: ellipsis;
+    }
+
+    & .ds_user {
+        grid-area: user;
+    }
+
+    & .ds_email {
+        grid-area: email;
+    }
+
+    & .ds_title {
+        grid-area: title;
+        text-align: center;
+    }
+
+    & .ds_types {
+        grid-area: types;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 10px;
+
+        &>span {
+            padding: 5px 10px;
+            border-radius: 20px;
+            width: fit-content;
+            height: fit-content;
+            box-shadow: 0 0 5px 1px #00000030;
+            background: var(--lightgray);
+            color: black;
+        }
+
+    }
+
+    & .ds_body {
+        grid-area: body;
+        background: var(--dark_blue);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px 1px #00000030;
+        line-height: 150%;
+        overflow: auto;
+        color: #f2f2f2;
+        font-weight: 500;
+    }
+
+    & .ds_attachements {
+        grid-area: att;
+        background: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-left: 3px solid var(--dark_blue);
+        margin-left: 10px;
+        padding-left: 10px;
+
+        & .adjuntos {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            border: 2px dashed var(--green);
+            width: 100%;
+        }
+    }
+}
+
+.queja_controles {
+    height: 100%;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    & svg {
+        cursor: pointer;
+    }
+
 }

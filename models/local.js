@@ -5,7 +5,6 @@ import { JSONFilePreset } from "lowdb/node";
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
 
-
 const db = await JSONFilePreset("./db.json", { quejas: [] });
 
 export class LocalDB {
@@ -14,7 +13,7 @@ export class LocalDB {
         // Validamos el cuerpo para evitar fugas
         const validate = ValidateQueja(body);
         if (validate.status !== "OK") {
-            return validate
+            return validate;
         }
 
         // Recuperar el TIME
@@ -30,6 +29,7 @@ export class LocalDB {
             time: formatter_time.format(date),
             email: body.email,
             motivo: body.motivo,
+            queja: body.queja,
             asignatura: body.asignatura,
             titulo: body.titulo,
             cuerpo: body.cuerpo,
