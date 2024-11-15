@@ -158,7 +158,7 @@ async function GetFullQueja(event) {
     }
 }
 
-function DisplayQueja(_queja) {
+async function DisplayQueja(_queja) {
     // Añadimos los elementos que siempre estan
     let type = `<span class='ds_type'>${_queja.motivo}</span>`;
     
@@ -170,8 +170,6 @@ function DisplayQueja(_queja) {
     
     // Validamos si hay email o no
     let email = (_queja.email) ? _queja.email : "Anónimo";
-
-    let adjuntos = (_queja.files.length == 0) ? '<span>No hay ficheros</span>' : "uwu";
 
     // Creamos el elemento display
     const queja_display = `
@@ -185,7 +183,7 @@ function DisplayQueja(_queja) {
             <div class="ds_attachements">
                 <h3>Archivos adjuntos</h3>
                 <div class="adjuntos">
-                    ${adjuntos}
+                    ${ await LoadAttachedFiles(_queja.files)}
                 </div>
             </div>
         </div>
@@ -224,6 +222,27 @@ function DisplayQueja(_queja) {
     // Añadimos los eventos para cerrar el display
     back.addEventListener("click", CloseDisplay);
     xmark_icon.addEventListener("click", CloseDisplay);
+
+}
+
+async function LoadAttachedFiles(files){
+    // Incializamos el contenido html
+    let html = "";
+
+    if(files.length === 0){
+        return '<span>No hay ficheros</span>'
+    }
+
+    // Iteramos por cada archivo
+    for(const file of files){
+        html += `
+            <div class="attachemt_card">
+                <img src="${domain}/../files/attachemts/${file}">
+            </div>
+        `;
+    }
+
+    return html
 
 }
 

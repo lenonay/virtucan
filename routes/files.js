@@ -9,3 +9,5 @@ export const FilesRouter = Router();
 FilesRouter.use(authorize);
 
 FilesRouter.get("/pfp", FilesController.Get_PFP);
+
+FilesRouter.get("/attachemts/:id", FilesController.Get_Attach);

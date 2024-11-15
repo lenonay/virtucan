@@ -12,8 +12,9 @@ const storage = multer.diskStorage({
     destination: UPLOAD_ROUTE,
     filename: (req, file, cb) => {
         const suffix = Math.random().toString(16).replace(/0\./, "file-");
+        const date = new Date().toISOString();
         const ext = path.extname(file.originalname);
-        cb(null, suffix + ext);
+        cb(null, suffix + date + ext);
     },
 });
 
