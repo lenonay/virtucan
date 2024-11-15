@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 
 import { UPLOAD_ROUTE } from "../config.js";
 import { CreatePFP } from "../models/createPFP.js";
