@@ -10,4 +10,8 @@ FilesRouter.use(authorize);
 
 FilesRouter.get("/pfp", FilesController.Get_PFP);
 
-FilesRouter.get("/attachemts/:id", FilesController.Get_Attach);
+FilesRouter.get("/attachemnts", FilesController.Get_All_Filenames);
+
+FilesRouter.get("/attachemnts/:id", FilesController.Get_Attach);
+
+FilesRouter.delete("/attachemnts/:id", FilesController.DeleteFile);

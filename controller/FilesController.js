@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import path from "node:path";
 
 import { UPLOAD_ROUTE } from "../config.js";
 import { CreatePFP } from "../models/createPFP.js";
@@ -30,5 +29,35 @@ export class FilesController {
 
         res.sendFile(id, { root: UPLOAD_ROUTE });
 
+    }
+
+    static Get_All_Filenames(req, res) {
+        let files = fs.readdirSync(UPLOAD_ROUTE);
+
+        files = files.filter(file => file.startsWith("file-"));
+
+        res.send(files);
+    }
+
+    static DeleteFile(req, res) {
+        const { id } = req.params;
+        // Creamos la ruta del fichero
+        const path = UPLOAD_ROUTE + id;
+
+        // Si no existe el fichero retornamos 
+        if (!fs.existsSync(path)) {
+            res.send({ status: "error", msg: "El archivo ya no existe" });
+            return
+        }
+
+        // Intentamos borrar el fichero
+        try {
+            fs.unlinkSync(path);
+            // Mandamos la confirmación
+            res.send({status: "OK", msg: "Archivo borrado con éxito", id: id});
+        } catch {
+            // Enviamos el error
+            res.send({status: "error", msg: "El archivo no se pudo eliminar"});
+        }
     }
 }

@@ -16,8 +16,7 @@ export const {
 // Extensiones permitidas en la subida de archivos adjuntos
 export const allowed_exts = [
     "jpg", "png",
-    "jpeg", "gif",
-    "pdf"
+    "jpeg", "gif"
 ]
 
 // Las tablas que contiene la db local 
