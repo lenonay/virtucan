@@ -278,7 +278,7 @@ async function DeleteFile(event) {
 
 async function GetFullQueja(event) {
     // Recuperamos el id
-    const { id } = event.target;
+    const { id } = event.currentTarget;
 
     // Creamos el filtro con el id
     const query_params = new URLSearchParams({
