@@ -36,6 +36,8 @@ export class PanelController {
 
         // Cargamos la base de datos
         const db = await JSONFilePreset("./db.json", { quejas: [] });
+        // Leemos de nuevo la db
+        await db.read();
 
         // Guardamos una copia de las quejas
         const quejas_old = db.data.quejas;
