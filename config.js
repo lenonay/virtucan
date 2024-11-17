@@ -1,4 +1,7 @@
 import fs from "node:fs";
+import bcrypt from "bcrypt";
+
+import { JSONFilePreset } from "lowdb/node";
 import { configDotenv } from "dotenv";
 configDotenv();
 
@@ -53,5 +56,20 @@ else {
 
     // Guardamos los cambios
     fs.writeFileSync("./db.json", JSON.stringify(data));
+
+    const db = await JSONFilePreset("./db.json", { users: [] });
+
+    if (db.data.users.length === 0) {
+        const hash = await bcrypt.hash(DEFAULT_USER, 10);
+        await db.update(({ users }) => {
+            users.push(
+                {
+                    id: 1, 
+                    user: DEFAULT_USER,
+                    passwd: hash,
+                    priv: "admin"
+                })
+        });
+    }
 
 }

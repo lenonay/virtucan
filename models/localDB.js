@@ -1,26 +1,11 @@
 import { JSONFilePreset } from "lowdb/node";
 import bcrypt from "bcrypt";
-
-import { DEFAULT_USER } from "../config.js";
-
-const db = await JSONFilePreset("./db.json", { users: [] });
-
 // Si esta vacío metemos uno por defecto
-if (db.data.users.length === 0) {
-    const hash = await bcrypt.hash(DEFAULT_USER, 10);
-    await db.update(({ users }) => {
-        users.push(
-            {
-                id: 1, 
-                user: DEFAULT_USER,
-                passwd: hash,
-                priv: "admin"
-            })
-    });
-}
+
 
 export class LocalDB {
     static async CheckUser(user, passwd) {
+        const db = await JSONFilePreset("./db.json", { users: [] });
         const { users } = db.data;
 
         // Buscamos el usuario para ver si existe

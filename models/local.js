@@ -5,10 +5,11 @@ import { JSONFilePreset } from "lowdb/node";
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
 
-const db = await JSONFilePreset("./db.json", { quejas: [] });
 
 export class LocalDB {
     static async register(body, ip) {
+        // Cargamos la DB por cada peticion
+        const db = await JSONFilePreset("./db.json", { quejas: [] });
 
         // Validamos el cuerpo para evitar fugas
         const validate = ValidateQueja(body);
