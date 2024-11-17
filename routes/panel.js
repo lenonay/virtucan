@@ -12,3 +12,5 @@ PanelRouter.get("/", (req, res) => {
 });
 
 PanelRouter.get("/quejas", PanelController.QuejasByDate);
+
+PanelRouter.delete("/quejas/:id", PanelController.DeleteQueja);

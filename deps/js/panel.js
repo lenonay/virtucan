@@ -133,9 +133,58 @@ async function HandleHomeBtn(event) {
 
 }
 
-function HandleQuejasBtn(event) {
+async function HandleQuejasBtn(event) {
     // Preparamos la base
     PrepareViewer("quejas", btn_quejas);
+
+    // Obtenemos todas las quejas
+    const peticion = await fetch(`${domain}/quejas`);
+    const quejas = (peticion.ok) ? await peticion.json() : null;
+
+    // Creamos el elemento html
+    const contenedor = document.createElement("div");
+    contenedor.classList.add("quejas_container");
+
+    // Creamos el titulo
+    const titulo = document.createElement("h1");
+    titulo.textContent = "Todas las quejas";
+
+    if (!quejas) {
+        contenedor.innerHTML = "<h3>No hay quejas registradas</h3>";
+    } else {
+        quejas.reverse();
+
+        quejas.forEach(queja => {
+            // Sacamos los parámetros de las quejas
+            const { id, time, date, titulo, motivo } = queja;
+            // Creamos la queja
+            const html = `
+                <div class="queja" id="${id}">
+                    <span time date>${date}</span>
+                    <span time>${time}</span>
+                    <span motivo>${motivo}</span>
+                    <span titulo>${titulo}</span>
+                </div>
+            `;
+
+            contenedor.innerHTML += html;
+        });
+    }
+
+    // Añadimos el contenedor y el titulo
+    $cont1.appendChild(titulo);
+    $cont1.appendChild(contenedor);
+
+    // Recuperamos todas las quejas que hemos añadido
+    const quejas_el = document.querySelectorAll(".queja");
+
+    // Si hay quejas les añadimos el evento de para mostrarlas
+    if (quejas_el) {
+        quejas_el.forEach(queja => {
+            queja.addEventListener("click", GetFullQueja);
+        })
+    }
+
 }
 
 async function HandleStorageBtn(event) {
@@ -215,45 +264,10 @@ async function DeleteFile(event) {
     // Sacamos el src y de la url sacamos solo el nombre del fichero
     const filename = img.getAttribute("src").toString().split("/").pop();
 
-    // Creamos el elemento back
-    const back = document.createElement("div");
-    back.className = "cancel_back";
+    // Creamos la alerta
+    CreateAlert($cont1);
 
-    // Creamos el elemento alerta
-    const alerta = document.createElement("div");
-    alerta.className = "alerta";
-
-    // Creamos el html de la alerta
-    alerta.innerHTML = `
-        <h3><span>[!]</span> ¡Atención!</h3>
-        <p>Esta acción no se puede deshacer, ¿está seguro de continuar?</p>
-        <div class="alerta_btns">
-            <button class="continuar_btn">Continuar</button>
-            <button class="cancelar_btn">Cancelar</button>
-        </div>
-    `;
-
-    // Borramos la alerta si ya estaba 
-    if (document.querySelector(".alerta")) {
-        document.querySelector(".alerta").remove();
-    }
-
-    // Borramos el fondo para cancelar si ya estaba
-    if (document.querySelector(".cancel_back")) {
-        document.querySelector(".cancel_back");
-    }
-
-    // Añadimos los elementos al bloque de contenido actual
-    $cont1.append(back);
-    $cont1.append(alerta);
-
-    // Recuperamos los botones de confirmacion
     const continuar_btn = document.querySelector(".continuar_btn");
-    const cancelar_btn = document.querySelector(".cancelar_btn");
-
-    // Asignamos los eventos para cancelar
-    cancelar_btn.addEventListener("click", CloseDisplay);
-    back.addEventListener("click", CloseDisplay);
 
     // Asignamo el evento de enviar la peticion de borrado al servidor
     continuar_btn.addEventListener("click", async (event) => {
@@ -265,9 +279,9 @@ async function DeleteFile(event) {
 
         if (resultado.status !== "OK") {
             ShowMsg({ type: "error", msg: resultado.msg });
-        }else {
+        } else {
             ShowMsg({ type: "advice", msg: resultado.msg });
-            HandleStorageBtn();
+            ReloadSelectedZone();
         }
 
         CloseDisplay();
@@ -314,7 +328,7 @@ async function DisplayQueja(_queja) {
 
     // Creamos el elemento display
     const queja_display = `
-        <div class="queja_display">
+        <div class="queja_display" id="${_queja.id}">
             <span class="ds_timestamp">${_queja.date} ${_queja.time}</span>
             <span class="ds_user">${_queja.user}</span>
             <span class="ds_email">${email}</span>
@@ -359,6 +373,10 @@ async function DisplayQueja(_queja) {
 
     // Recuperamos el icono de cerrar
     const xmark_icon = document.querySelector(".xmark_icon");
+    const trash_icon = document.querySelector(".trash_icon");
+
+    // Añadimos el evento para borrar la queja
+    trash_icon.addEventListener("click", DeleteQueja);
 
     // Añadimos los eventos para cerrar el display
     back.addEventListener("click", CloseDisplay);
@@ -370,6 +388,48 @@ async function DisplayQueja(_queja) {
         attach.addEventListener("click", OpenAttachemnt);
     }
 
+}
+
+async function DeleteQueja(event) {
+    // Recuperamos el display de la queja
+    const padre = document.querySelector(".queja_display");
+
+    // Recuperamos el id de la queja
+    const { id } = padre;
+
+    // Creamos la alerta
+    CreateAlert($cont1);
+
+    const continuar_btn = document.querySelector(".continuar_btn");
+
+    // Asignamos el evento para continuar
+    continuar_btn.addEventListener("click", async () => {
+        const peticion = await fetch(`${domain}/quejas/${id}`, {
+            method: "DELETE"
+        });
+        const resultado = (peticion.ok) ? await peticion.json() : null;
+
+        // Cerramos los display
+        CloseDisplay();
+
+        // Si no hay resultado por fallo de conectar al servidor
+        if (!resultado) {
+            ShowMsg({ type: "error", msg: "No se pudo conectar con el servidor" });
+            return
+        }
+
+        // Si hubo un fallo en el servidor, no existe la queja, etc
+        if (resultado.status !== "OK") {
+            ShowMsg({ type: "error", msg: resultado.msg });
+            return
+        }
+
+        // Si todo fue bien mostrar mensaje de exito;
+        ShowMsg({ type: "succes", msg: resultado.msg });
+
+        // Recargamos la seccion para que se vean los cambios
+        ReloadSelectedZone();
+    });
 }
 
 async function LoadAttachedFiles(files) {
@@ -413,6 +473,23 @@ function OpenInNewTab(url) {
     }
 }
 
+function ReloadSelectedZone() {
+    const selected_btn = document.querySelector(".selected").classList[0];
+
+    // Switch para llamar a las funciones
+    switch (true) {
+        case selected_btn == "btn_home":
+            HandleHomeBtn();
+            break;
+        case selected_btn == "btn_quejas":
+            HandleQuejasBtn();
+            break;
+        case selected_btn == "btn_storage":
+            HandleStorageBtn();
+            break;
+    }
+}
+
 function CloseDisplay(event) {
     const back = document.querySelector(".cancel_back");
     const display = document.querySelector(".display");
@@ -432,6 +509,47 @@ function CloseDisplay(event) {
 
 }
 
+function CreateAlert(elemento) {
+    // Creamos el elemento back
+    const back = document.createElement("div");
+    back.className = "cancel_back";
+
+    // Creamos el elemento alerta
+    const alerta = document.createElement("div");
+    alerta.className = "alerta";
+
+    // Creamos el html de la alerta
+    alerta.innerHTML = `
+        <h3><span>[!]</span> ¡Atención!</h3>
+        <p>Esta acción no se puede deshacer, ¿está seguro de continuar?</p>
+        <div class="alerta_btns">
+            <button class="continuar_btn">Continuar</button>
+            <button class="cancelar_btn">Cancelar</button>
+        </div>
+    `;
+
+    // Borramos la alerta si ya estaba 
+    if (document.querySelector(".alerta")) {
+        document.querySelector(".alerta").remove();
+    }
+
+    // Borramos el fondo para cancelar si ya estaba
+    if (document.querySelector(".cancel_back")) {
+        document.querySelector(".cancel_back").remove();
+    }
+
+    // Añadimos los elementos al bloque de contenido actual
+    elemento.append(back);
+    elemento.append(alerta);
+
+    // Recuperamos los botones de confirmacion
+    const cancelar_btn = document.querySelector(".cancelar_btn");
+
+    // Asignamos los eventos para cancelar
+    cancelar_btn.addEventListener("click", CloseDisplay);
+    back.addEventListener("click", CloseDisplay);
+}
+
 function ShowMsg(msg) {
     // Recuperamos el display
     const msg_display = document.querySelector(".upper_msg");
@@ -445,7 +563,7 @@ function ShowMsg(msg) {
     // Si es un error añadimos la clase eror
     if (msg.type === "error") {
         p.className = "error";
-    }else {
+    } else {
         p.className = "succed";
     }
 

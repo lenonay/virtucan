@@ -213,6 +213,7 @@ body {
         align-items: center;
         transition: all 300ms ease;
         padding: 20px;
+        overflow-y: auto;
         /* position: relative; */
     }
 }
@@ -290,20 +291,6 @@ body {
             font-size: 18px;
             padding: 0;
         }
-    }
-}
-
-.viewer.quejas {
-    grid-template-areas:
-        "cont1 cont1 cont1 cont1 cont1 cont2"
-        "cont1 cont1 cont1 cont1 cont1 cont2"
-        "cont1 cont1 cont1 cont1 cont1 cont2"
-        "cont1 cont1 cont1 cont1 cont1 cont2"
-    ;
-
-    .contenido3,
-    .contenido4 {
-        display: none;
     }
 }
 
@@ -526,7 +513,6 @@ body {
         flex-wrap: wrap;
         width: 100%;
         height: 100%;
-        overflow-y: auto;
         position: relative;
     }
 
@@ -631,5 +617,50 @@ body {
                 box-shadow: 0 0 10px 2px var(--green);
             }
         }
+    }
+}
+
+.trash_icon,.block_icon {
+    transition: all 300ms ease;
+
+    &:hover {
+        color: var(--alert);
+        filter: drop-shadow(0 2px var(--coral));
+    }
+}
+
+.viewer.quejas {
+    grid-template-areas:
+        "cont1 cont1 cont1 cont1 cont1 cont2"
+        "cont1 cont1 cont1 cont1 cont1 cont2"
+        "cont1 cont1 cont1 cont1 cont1 cont2"
+        "cont1 cont1 cont1 cont1 cont1 cont2"
+    ;
+
+    .contenido3,
+    .contenido4 {
+        display: none;
+    }
+
+    & .contenido1 {
+        flex-direction: column;
+        gap: 15px;
+
+        & h1 {
+            color: aliceblue;
+        }
+    }
+
+    & .quejas_container {
+        height: 100%;
+        max-height: none;
+
+        & .queja {
+            & span[date] {
+                font-weight: 600;
+                text-shadow: #00000030 1px 0 10px;
+            }
+        }
+
     }
 }
