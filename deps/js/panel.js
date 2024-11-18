@@ -5,6 +5,7 @@ const btn_quejas = document.querySelector(".btn_quejas");
 const btn_storage = document.querySelector(".btn_storage");
 const btn_stats = document.querySelector(".btn_stats");
 const btn_users = document.querySelector(".btn_users");
+const btn_logoff = document.querySelector(".btn_logoff");
 // Bloques de contenido
 const $cont1 = document.querySelector(".contenido1");
 const $cont2 = document.querySelector(".contenido2");
@@ -29,8 +30,24 @@ const svgs = {
 btn_home.addEventListener("click", HandleHomeBtn);
 btn_quejas.addEventListener("click", HandleQuejasBtn);
 btn_storage.addEventListener("click", HandleStorageBtn);
+btn_logoff.addEventListener("click", Logoff);
 
 ///////////////// FUNCIONES
+async function Logoff(event) {
+    const peticion = await fetch(`${base_domain}/login`,{
+        method: "DELETE"
+    });
+
+    const resultado = (peticion.ok) ? await peticion.json() : null;
+
+    if(!resultado){
+        ShowMsg({type: "error", msg: "No se ha podido cerrar sesión"});
+        return
+    }
+
+    window.location = `${base_domain}/login`;
+}
+
 function RemoveAllSelected() {
     // Obtenemos todos los botones seleccionados
     const all_selected = document.querySelectorAll(".selected");

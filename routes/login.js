@@ -21,3 +21,5 @@ LoginRouter.get("/", (req, res) => {
 
 
 LoginRouter.post("/", LoginController.Login);
+
+LoginRouter.delete("/", LoginController.Logoff);

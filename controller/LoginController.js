@@ -51,4 +51,9 @@ export class LoginController {
             .send({ status: "OK", msg: "Atenticación correcta" })
         ;
     }
+
+    static async Logoff(req, res){
+        // Borramos la cookie y madamos la confirmación
+        res.clearCookie("token").send({status: "OK"});
+    }
 }
