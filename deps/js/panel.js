@@ -5,6 +5,7 @@ const btn_quejas = document.querySelector(".btn_quejas");
 const btn_storage = document.querySelector(".btn_storage");
 const btn_stats = document.querySelector(".btn_stats");
 const btn_users = document.querySelector(".btn_users");
+const btn_pfp = document.querySelector(".pfp");
 const btn_logoff = document.querySelector(".btn_logoff");
 // Bloques de contenido
 const $cont1 = document.querySelector(".contenido1");
@@ -17,6 +18,8 @@ const upper_msg = document.querySelector(".upper_msg");
 // Extras
 const domain = document.location;
 const base_domain = domain.toString().slice(0, -6);
+const allowed_exts = ["jpg", "png", "jpeg"];
+const max_size = 2000000; // 2MB
 // Formateadores de fecha
 const DateFormatter = new Intl.DateTimeFormat("es-ES", { dateStyle: "short" });
 const TimeFormatter = new Intl.DateTimeFormat("es-ES", { timeStyle: "short" });
@@ -30,18 +33,20 @@ const svgs = {
 btn_home.addEventListener("click", HandleHomeBtn);
 btn_quejas.addEventListener("click", HandleQuejasBtn);
 btn_storage.addEventListener("click", HandleStorageBtn);
+
+btn_pfp.addEventListener("click", HandlePfpBtn);
 btn_logoff.addEventListener("click", Logoff);
 
 ///////////////// FUNCIONES
 async function Logoff(event) {
-    const peticion = await fetch(`${base_domain}/login`,{
+    const peticion = await fetch(`${base_domain}/login`, {
         method: "DELETE"
     });
 
     const resultado = (peticion.ok) ? await peticion.json() : null;
 
-    if(!resultado){
-        ShowMsg({type: "error", msg: "No se ha podido cerrar sesión"});
+    if (!resultado) {
+        ShowMsg({ type: "error", msg: "No se ha podido cerrar sesión" });
         return
     }
 
@@ -219,6 +224,82 @@ async function HandleStorageBtn(event) {
     if (resultado) {
         DisplayFiles(resultado);
     }
+}
+
+async function HandlePfpBtn(event) {
+    PrepareViewer("pfp", btn_pfp);
+
+    // Creamos la img de perfil y la guardamos en contenido 1
+    const pfp_img = `
+        <img class="pfp_img" src="${base_domain}/files/pfp">
+        <input type="file" name="pfp_new" id="inp_pfp" hidden>
+    `;
+
+    $cont1.innerHTML = pfp_img;
+    $cont2.innerHTML = "<h1>Datos personales</h1>";
+    $cont3.innerHTML = "<h1>Botones</h1>";
+    $cont4.innerHTML = "<h1>Acciones recientes</h1>";
+
+    // Elementos
+    const $pfp_img = document.querySelector(".pfp_img");
+    const $inp_pfp = document.querySelector("#inp_pfp");
+
+    // Eventos
+    $pfp_img.addEventListener("click", () => { $inp_pfp.click() });
+    $inp_pfp.addEventListener("change", UploadPFP);
+}
+
+async function UploadPFP(event){
+    // Recuperamos los archivos del input
+    const files = event.target.files;
+
+    // Si no hay ficheros salimos
+    if(!files) return;
+
+    // Sacamos el primer archivo y sus caracteristicas
+    const file = files[0];
+    const { name, size } = file;
+
+    // Revisamos la extensión
+    const file_ext = name.split(".").pop().toLowerCase();
+
+    // Si la extesión no esta permitida mostramos error
+    if(!allowed_exts.includes(file_ext)) {
+        ShowMsg({type: "error", msg: "Extensión inválida, solo se permiten imágenes"});
+        return;
+    }
+
+    // Revisamos el peso
+    if(size > max_size) {
+        ShowMsg({type: "error", msg: "Peso excedido, 2MB como máximo"});
+        return;
+    }
+
+    // Instanciamos el formulario y añadimos el fichero
+    const form = new FormData();
+    form.append("new_pfp", file);
+
+    // Hacemos la peticion al servidor
+    const peticion = await fetch(`${base_domain}/files/pfp`, {
+        method: "POST",
+        body: form
+    });
+
+    const result = (peticion.ok) ? await peticion.json() : null;
+
+    // Si no se hizo la peticion
+    if(!result) {
+        ShowMsg({type: "error", msg: "No se pudo conectar con el servidor"});
+        return;
+    }
+
+    // Si hubo en error por parte del server
+    if(result.status !== "OK"){
+        ShowMsg({type: "error", msg: result.error});
+        return;
+    }
+
+    ShowMsg({type: "success", msg: "Archivo subido con éxito" + result.filename});
 }
 
 function DisplayFiles(files) {

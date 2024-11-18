@@ -7,15 +7,70 @@ export class FilesController {
     static Get_PFP(req, res) {
         const { user } = req.session;
 
-        const pfp_route = `${UPLOAD_ROUTE}pfp-${user}.png`;
+        // recuperamos todos los ficheros de la carpeta upload y los filtramos por el user
+        const ficheros = fs.readdirSync(UPLOAD_ROUTE);
+        const filtrado = ficheros.filter(file => file.includes(user));
 
-        // Verificamos que tenga una foto ya
-        if (!fs.existsSync(pfp_route)) {
-            // Obtener imagen random
-            CreatePFP(user);
+        // Si hay mas de 1 borramos todos, creamos uno nuevo y lo enviamos
+        if (filtrado.length > 1) {
+
+            // Eliminamos todos los ficheros
+            filtrado.forEach(file => {
+                const path = UPLOAD_ROUTE + file;
+
+                try {
+                    fs.unlinkSync(path);
+                } catch { }
+            })
+
+            const pfp_route = CreatePFP(user);
+            res.sendFile(pfp_route, { root: "./" });
+
+            return;
         }
 
-        res.sendFile(pfp_route, { root: "./" });
+        // Si no hay ninguno con el usuario, se crea uno y se envia
+        if (filtrado.length === 0) {
+            const pfp_route = CreatePFP(user);
+            res.sendFile(pfp_route, { root: "./" });
+
+            return;
+        }
+
+        // Si solo hay uno lo enviamos
+        const path = UPLOAD_ROUTE + filtrado[0];
+
+        res.sendFile(path, { root: "./" });
+    }
+
+    static Delete_User_PFP(user) {
+
+        // Recuperamos todos los archivos de la ruta
+        const dirElements = fs.readdirSync(UPLOAD_ROUTE);
+
+        // Filtramos por los que contienen el nombre del usuario
+        const filtered = dirElements.filter(elemento => elemento.includes(user));
+
+        // Si no hay ninguno salimos
+        if (!filtered) return;
+
+        filtered.forEach(file => {
+            const path = UPLOAD_ROUTE + file;
+            try {
+                fs.unlinkSync(path);
+            } catch { }
+        });
+
+    }
+
+    static Upload_User_PFP(req, res) {
+
+        if (!req.file) {
+            res.json({ status: "error", error: "No se pudo subir el archivo" });
+            return
+        }
+
+        res.json({ status: "OK", filaname: req.file.filaname });
     }
 
     static Get_Attach(req, res) {
@@ -54,10 +109,10 @@ export class FilesController {
         try {
             fs.unlinkSync(path);
             // Mandamos la confirmación
-            res.send({status: "OK", msg: "Archivo borrado con éxito", id: id});
+            res.send({ status: "OK", msg: "Archivo borrado con éxito", id: id });
         } catch {
             // Enviamos el error
-            res.send({status: "error", msg: "El archivo no se pudo eliminar"});
+            res.send({ status: "error", msg: "El archivo no se pudo eliminar" });
         }
     }
 }

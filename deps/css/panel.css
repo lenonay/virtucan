@@ -138,6 +138,8 @@ body {
             }
         }
     }
+
+
 }
 
 .user {
@@ -146,6 +148,19 @@ body {
         aspect-ratio: 1;
         object-fit: cover;
         border-radius: 50%;
+    }
+
+    & .selected>img {
+        box-shadow: 0 0 10px var(--green);
+    }
+
+    .btn_logoff {
+        transition: all 300ms ease;
+
+        &:hover {
+            color: var(--green);
+            filter: drop-shadow(0 2.5px var(--light));
+        }
     }
 }
 
@@ -620,7 +635,8 @@ body {
     }
 }
 
-.trash_icon,.block_icon {
+.trash_icon,
+.block_icon {
     transition: all 300ms ease;
 
     &:hover {
@@ -662,5 +678,27 @@ body {
             }
         }
 
+    }
+}
+
+.viewer.pfp {
+    grid-template-areas:
+        "cont1 cont1 cont2 cont2 cont2 cont2"
+        "cont1 cont1 cont2 cont2 cont2 cont2"
+        "cont3 cont4 cont4 cont4 cont4 cont4"
+        "cont3 cont4 cont4 cont4 cont4 cont4"
+    ;
+
+    &>div {
+        display: flex;
+        overflow: auto;
+        height: 345px;
+    }
+
+    .pfp_img {
+        height: 90%;
+        aspect-ratio: 1;
+        cursor: pointer;
+        border-radius: 20px;
     }
 }
