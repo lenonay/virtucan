@@ -697,6 +697,7 @@ body {
 
     .pfp_img {
         height: 90%;
+        object-fit: cover;
         aspect-ratio: 1;
         cursor: pointer;
         border-radius: 20px;

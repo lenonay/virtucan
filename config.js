@@ -67,7 +67,9 @@ else {
                     id: 1, 
                     user: DEFAULT_USER,
                     passwd: hash,
-                    priv: "admin"
+                    email: PERS_MAIL,
+                    priv: "master"
+
                 })
         });
     }

@@ -249,12 +249,12 @@ async function HandlePfpBtn(event) {
     $inp_pfp.addEventListener("change", UploadPFP);
 }
 
-async function UploadPFP(event){
+async function UploadPFP(event) {
     // Recuperamos los archivos del input
     const files = event.target.files;
 
     // Si no hay ficheros salimos
-    if(!files) return;
+    if (!files || !files[0]) return;
 
     // Sacamos el primer archivo y sus caracteristicas
     const file = files[0];
@@ -264,14 +264,14 @@ async function UploadPFP(event){
     const file_ext = name.split(".").pop().toLowerCase();
 
     // Si la extesión no esta permitida mostramos error
-    if(!allowed_exts.includes(file_ext)) {
-        ShowMsg({type: "error", msg: "Extensión inválida, solo se permiten imágenes"});
+    if (!allowed_exts.includes(file_ext)) {
+        ShowMsg({ type: "error", msg: "Extensión inválida, solo se permiten imágenes" });
         return;
     }
 
     // Revisamos el peso
-    if(size > max_size) {
-        ShowMsg({type: "error", msg: "Peso excedido, 2MB como máximo"});
+    if (size > max_size) {
+        ShowMsg({ type: "error", msg: "Peso excedido, 2MB como máximo" });
         return;
     }
 
@@ -288,18 +288,16 @@ async function UploadPFP(event){
     const result = (peticion.ok) ? await peticion.json() : null;
 
     // Si no se hizo la peticion
-    if(!result) {
-        ShowMsg({type: "error", msg: "No se pudo conectar con el servidor"});
+    if (!result) {
+        ShowMsg({ type: "error", msg: "No se pudo conectar con el servidor" });
         return;
     }
 
     // Si hubo en error por parte del server
-    if(result.status !== "OK"){
-        ShowMsg({type: "error", msg: result.error});
+    if (result.status !== "OK") {
+        ShowMsg({ type: "error", msg: result.error });
         return;
     }
-
-    ShowMsg({type: "success", msg: "Archivo subido con éxito" + result.filename});
 }
 
 function DisplayFiles(files) {
