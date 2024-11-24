@@ -5,11 +5,11 @@ import { CreatePFP } from "../models/createPFP.js";
 
 export class FilesController {
     static Get_PFP(req, res) {
-        const { user } = req.session;
+        const { id } = req.session;
 
         // recuperamos todos los ficheros de la carpeta upload y los filtramos por el user
         const ficheros = fs.readdirSync(UPLOAD_ROUTE);
-        const filtrado = ficheros.filter(file => file.includes(user));
+        const filtrado = ficheros.filter(file => file.includes(id));
 
         // Si hay mas de 1 borramos todos, creamos uno nuevo y lo enviamos
         if (filtrado.length > 1) {
@@ -23,7 +23,7 @@ export class FilesController {
                 } catch { }
             })
 
-            const pfp_route = CreatePFP(user);
+            const pfp_route = CreatePFP(id);
             res.sendFile(pfp_route, { root: "./" });
 
             return;
@@ -31,7 +31,7 @@ export class FilesController {
 
         // Si no hay ninguno con el usuario, se crea uno y se envia
         if (filtrado.length === 0) {
-            const pfp_route = CreatePFP(user);
+            const pfp_route = CreatePFP(id);
             res.sendFile(pfp_route, { root: "./" });
 
             return;
@@ -43,13 +43,13 @@ export class FilesController {
         res.sendFile(path, { root: "./" });
     }
 
-    static Delete_User_PFP(user) {
+    static Delete_User_PFP(id) {
 
         // Recuperamos todos los archivos de la ruta
         const dirElements = fs.readdirSync(UPLOAD_ROUTE);
 
         // Filtramos por los que contienen el nombre del usuario
-        const filtered = dirElements.filter(elemento => elemento.includes(user));
+        const filtered = dirElements.filter(elemento => elemento.includes(id));
 
         // Si no hay ninguno salimos
         if (!filtered) return;

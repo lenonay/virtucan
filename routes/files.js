@@ -14,13 +14,13 @@ const storage = multer.diskStorage({
     destination: UPLOAD_ROUTE,
     filename: (req, file, cb) => {
         // Recuperamos el user y la extensión
-        const { user } = req.session;
+        const { id } = req.session;
         const ext = path.extname(file.originalname);
 
         // Borramos los ficheros anteriores
-        FilesController.Delete_User_PFP(user);
+        FilesController.Delete_User_PFP(id);
 
-        cb(null, "pfp-" + user + ext);
+        cb(null, "pfp-" + id + ext);
     }
 });
 
@@ -56,7 +56,7 @@ FilesRouter.delete("/attachemnts/:id", FilesController.DeleteFile);
 
 FilesRouter.get("/pfp", FilesController.Get_PFP);
 
-FilesRouter.post("/pfp", pfp_upload.single("new_pfp"), FilesController.Delete_User_PFP);
+FilesRouter.post("/pfp", pfp_upload.single("new_pfp"), FilesController.Upload_User_PFP);
 
 FilesRouter.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {

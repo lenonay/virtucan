@@ -317,6 +317,22 @@ async function UploadPFP(event) {
         ShowMsg({ type: "error", msg: result.error });
         return;
     }
+
+    // Mostramos el mensaje y recargamos las imagenes
+    ShowMsg({type: "success", msg: "Se ha subido la nueva foto de perfil"});
+    ReloadPFP();
+}
+
+function ReloadPFP(){
+    // Recuperamos las imagenes
+    const pfp_icon = document.querySelector(".pfp img");
+    const pfp_img = document.querySelector(".pfp_img");
+
+    pfp_icon.src = pfp_icon.src + "?reload";
+
+    if(pfp_img){
+        pfp_img.src = pfp_img.src + "?reload";
+    }
 }
 
 async function GetUserData() {
