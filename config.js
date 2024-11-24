@@ -94,7 +94,7 @@ else {
                     email: PERS_MAIL,
                     priv: "master",
                     asignaturas: "",
-                    extra: "",
+                    extras: "",
                     notify: false
                 })
         });
