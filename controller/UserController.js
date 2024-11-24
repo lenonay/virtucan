@@ -1,16 +1,17 @@
+import jwt from "jsonwebtoken";
 import { JSONFilePreset } from "lowdb/node";
 
-import { ValidateUser } from "../config.js";
+import { JWT_PASS, ValidateUser } from "../config.js";
 
 export class UserController {
     static async GetUserInfo(req, res) {
         // Recuperamos el usuario
-        const { user } = req.session;
+        const { id } = req.session;
         // Recuperamos la base de datos
         const db = await JSONFilePreset("./db.json", { users: [] });
 
         // Obtenemos los datos del usuario
-        const userDataDB = db.data.users.find(entry => entry.user === user);
+        const userDataDB = db.data.users.find(entry => entry.id === id);
 
         // Si hay datos del usuario
         if (userDataDB) {
@@ -45,6 +46,28 @@ export class UserController {
 
         // Cambiamos los datos
         let userDB = db.data.users[indice];
+
+        // Si ha cambiado el usuario actualizamos el JWT
+        if(userDB.user !== data.user){
+            // Definimos el contenido
+            const payload = {
+                id: userDB.id,
+                user: data.user,
+                priv: userDB.priv
+            }
+
+            // Creamos el token
+            const token  = jwt.sign(payload, JWT_PASS, {
+                expiresIn: "1h"
+            });
+
+            // Sobreescribimos el token
+            res.cookie("token", token, {
+                httpOnly: true,
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60
+            });
+        }
 
         userDB.user = data.user
         userDB.email = data.email;

@@ -261,10 +261,12 @@ async function HandlePfpBtn(event) {
     $pfp_img.addEventListener("click", () => { $inp_pfp.click() });
     $inp_pfp.addEventListener("change", UploadPFP);
 
-    edit_btn.addEventListener("click", EditPersonalData);
-    cancel_btn.addEventListener("click", CancelEditPersonalData);
+    if (edit_btn) {
+        edit_btn.addEventListener("click", EditPersonalData);
+        cancel_btn.addEventListener("click", CancelEditPersonalData);
 
-    confirm_btn.addEventListener("click", UpdatePersonalData);
+        confirm_btn.addEventListener("click", UpdatePersonalData);
+    }
 
 }
 
@@ -319,18 +321,18 @@ async function UploadPFP(event) {
     }
 
     // Mostramos el mensaje y recargamos las imagenes
-    ShowMsg({type: "success", msg: "Se ha subido la nueva foto de perfil"});
+    ShowMsg({ type: "success", msg: "Se ha subido la nueva foto de perfil" });
     ReloadPFP();
 }
 
-function ReloadPFP(){
+function ReloadPFP() {
     // Recuperamos las imagenes
     const pfp_icon = document.querySelector(".pfp img");
     const pfp_img = document.querySelector(".pfp_img");
 
     pfp_icon.src = pfp_icon.src + "?reload";
 
-    if(pfp_img){
+    if (pfp_img) {
         pfp_img.src = pfp_img.src + "?reload";
     }
 }
@@ -412,7 +414,7 @@ async function UpdatePersonalData() {
     };
 
     // Hacemos la petición de actualización al servidor
-    const peticion = await fetch(`${base_domain}/user`,{
+    const peticion = await fetch(`${base_domain}/user`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -423,19 +425,19 @@ async function UpdatePersonalData() {
     const resultado = (peticion.ok) ? await peticion.json() : null;
 
     // Si la conexion falla lo mostramos y salimos
-    if(!resultado){
-        ShowMsg({type: "error", msg: "No se pudo conectar con el servidor"});
+    if (!resultado) {
+        ShowMsg({ type: "error", msg: "No se pudo conectar con el servidor" });
         return;
     }
 
     // Si hubo un error lo mostramos y salimos
-    if(resultado.status !== "OK"){
-        ShowMsg({type: "error", msg: resultado.error[0]});
+    if (resultado.status !== "OK") {
+        ShowMsg({ type: "error", msg: resultado.error[0] });
         return;
     }
 
     // Mostramos mensaje de exito
-    ShowMsg({type: "success", msg: "Se han cambiado los datos"});
+    ShowMsg({ type: "success", msg: "Se han cambiado los datos" });
     // Quitamos el modo edición
     $cont2.classList.remove("editting");
     // Recargamos los datos completos
@@ -499,7 +501,7 @@ function CreatePersonalDataHTML(_data) {
         <h1>Datos Personales</h1>
         <div class="personal_data editting">
             <label for="nombre">
-                <span>Nombre</span>
+                <span>Nombre de usuario</span>
                 <input type="text" name="nombre" disabled value="${_data.user}"/>
             </label>
             <label for="email">
