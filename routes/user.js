@@ -11,6 +11,8 @@ UserRouter.use(authorize);
 // Recuperar los datos del usuario de la sesion
 UserRouter.get("/", UserController.GetUserInfo);
 
+UserRouter.put("/", UserController.UpdateOwnUser);
+
 // // Recuperar los datos de todos los usuarios
 // UserRouter.get("/all", UserController.GetAllUsersInfo);
 

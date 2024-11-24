@@ -30,7 +30,7 @@ try {
 
     app.use("/upload", UploadsRouter);
 
-    app.get("/favicon.ico", (req, res) => res.sendFile("virtucan.png", { root: "./public" }));
+    app.get("/favicon.ico", (req, res) => res.sendFile("noni_logo.png", { root: "./public" }));
 
     app.get("/", (req, res) => {
         res.sendFile("quejas.html", { root: "./views" });

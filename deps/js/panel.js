@@ -235,18 +235,37 @@ async function HandlePfpBtn(event) {
         <input type="file" name="pfp_new" id="inp_pfp" hidden>
     `;
 
+    // Recuperamos los datos del usuario
+    const datos_personales = await GetUserData();
+
+    // Creamos el contenido html de los datos personales
+    const $datos = (datos_personales)
+        ? CreatePersonalDataHTML(datos_personales)
+        : "<h1>Datos Personales</h1><h3>No se han podido cargar los datos</h3>"
+        ;
+
     $cont1.innerHTML = pfp_img;
-    $cont2.innerHTML = "<h1>Datos personales</h1>";
+    $cont2.innerHTML = $datos;
     $cont3.innerHTML = "<h1>Botones</h1>";
     $cont4.innerHTML = "<h1>Acciones recientes</h1>";
 
     // Elementos
     const $pfp_img = document.querySelector(".pfp_img");
     const $inp_pfp = document.querySelector("#inp_pfp");
+    // Botones
+    const edit_btn = document.querySelector(".edit_btn");
+    const confirm_btn = document.querySelector(".confirm_btn");
+    const cancel_btn = document.querySelector(".cancel_btn");
 
     // Eventos
     $pfp_img.addEventListener("click", () => { $inp_pfp.click() });
     $inp_pfp.addEventListener("change", UploadPFP);
+
+    edit_btn.addEventListener("click", EditPersonalData);
+    cancel_btn.addEventListener("click", CancelEditPersonalData);
+
+    confirm_btn.addEventListener("click", UpdatePersonalData);
+
 }
 
 async function UploadPFP(event) {
@@ -298,6 +317,207 @@ async function UploadPFP(event) {
         ShowMsg({ type: "error", msg: result.error });
         return;
     }
+}
+
+async function GetUserData() {
+    // Hacemos la petición
+    const peticion = await fetch(`${base_domain}/user`, {
+        method: "GET"
+    });
+
+    // Validamos la petición y parseamos el json
+    const resultado = (peticion.ok) ? await peticion.json() : null;
+
+    // Si no hay resultado retornamos un error
+    if (!resultado || resultado.status !== "OK") {
+        ShowMsg({ type: "error", msg: "No se han podido obtener los datos" });
+
+        return;
+    }
+
+    // Si todo sale bien retornamos los datos del usuario
+    return resultado.data;
+}
+
+async function CancelEditPersonalData() {
+    // Recuperamos los datos del usuario
+    const personalData = await GetUserData();
+
+    // Generamos el html
+    const html = CreatePersonalDataHTML(personalData);
+
+    // mostramos los datos y quitamos el modo edicion
+    $cont2.innerHTML = html;
+    $cont2.classList.remove("editting");
+
+    // Recuperamos todos los botones
+    const edit_btn = $cont2.querySelector(".edit_btn");
+    const confirm_btn = $cont2.querySelector(".confirm_btn");
+    const cancel_btn = $cont2.querySelector(".cancel_btn");
+
+    // Le asginamos de vuelta los eventos
+    edit_btn.addEventListener("click", EditPersonalData);
+    cancel_btn.addEventListener("click", CancelEditPersonalData);
+    confirm_btn.addEventListener("click", UpdatePersonalData);
+
+    // Mostramos un mensaje de operacion abortada
+    ShowMsg({ type: "success", msg: "Cambios abortados" });
+}
+
+async function UpdatePersonalData() {
+    // Recuperamos todos los inputs
+    const $user = $cont2.querySelector("input[name=nombre]");
+    const $email = $cont2.querySelector("input[name=email]");
+    const $priv = $cont2.querySelector("input[name=priv]");
+    const $extra = $cont2.querySelector("input[name=extra]");
+    const $notify = $cont2.querySelector("input[name=notify]");
+    const $all_asignaturas = $cont2.querySelectorAll(".asignaturas input");
+
+    // Si recibir notificaciones esta marcado guardamos true, sino false
+    const notify_value = ($notify.checked) ? true : false;
+
+    // Incializamos un array vacío
+    let asignaturas_value = [];
+
+    $all_asignaturas.forEach(input => {
+        if (input.checked) {
+            asignaturas_value.push(input.value);
+        }
+    });
+
+    // Creamos un objeto
+    const updatedData = {
+        user: $user.value,
+        email: $email.value,
+        priv: $priv.value,
+        asignaturas: asignaturas_value,
+        extras: $extra.value,
+        notify: notify_value
+    };
+
+    // Hacemos la petición de actualización al servidor
+    const peticion = await fetch(`${base_domain}/user`,{
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedData)
+    });
+
+    const resultado = (peticion.ok) ? await peticion.json() : null;
+
+    // Si la conexion falla lo mostramos y salimos
+    if(!resultado){
+        ShowMsg({type: "error", msg: "No se pudo conectar con el servidor"});
+        return;
+    }
+
+    // Si hubo un error lo mostramos y salimos
+    if(resultado.status !== "OK"){
+        ShowMsg({type: "error", msg: resultado.error[0]});
+        return;
+    }
+
+    // Mostramos mensaje de exito
+    ShowMsg({type: "success", msg: "Se han cambiado los datos"});
+    // Quitamos el modo edición
+    $cont2.classList.remove("editting");
+    // Recargamos los datos completos
+    HandlePfpBtn();
+}
+
+function EditPersonalData(event) {
+    // Recuperamos todos los botones
+    const edit_btn = event.target;
+    const confirm_btn = document.querySelector(".confirm_btn");
+    const cancel_btn = document.querySelector(".cancel_btn");
+
+    // Cambiamos el estado de los botones
+    edit_btn.classList.add("hidden");
+    confirm_btn.classList.remove("hidden");
+    cancel_btn.classList.remove("hidden");
+
+    // Recuperamos el titulo y preparamos el modo edición
+    $cont2.classList.add("editting");
+    $cont2.querySelector("h1").textContent = "Datos Personales - Modo edición";
+
+    // Volvemos todos los inputs usables
+    ToggleEditInputs(true);
+}
+
+function ToggleEditInputs(editar) {
+    // Recuperamos todos los inputs y todos los checkbox
+    const all_inputs = $cont2.querySelectorAll("input");
+
+    // Le añadimos o quitamos el atributo disabled a los elementos
+    all_inputs.forEach(input => {
+        if (editar) {
+            input.removeAttribute("disabled");
+        } else {
+            input.setAttribute("disabled", "");
+        }
+    })
+}
+
+function CreatePersonalDataHTML(_data) {
+    // Si notify es true guardamos checked para usarlo como atributto
+    let $notify = (_data.notify) ? "checked" : "";
+
+    // Definimos las asignaturas que tenemos
+    const asignaturas = ["SGY", "SRD", "ADD", "ADE", "IMW", "EIE"];
+    let $asignaturas = "";
+
+    // Iteramos por cada asignatura
+    asignaturas.forEach(asig => {
+        // Si en los datos del usuario aparece la asignatura, la marcamos con checked
+        let check = (_data.asignaturas.includes(asig)) ? "checked" : "";
+        // Creamos el html
+        $asignaturas += "<div>";
+        $asignaturas += `<span>${asig}</span>`;
+        $asignaturas += `<input type="checkbox" disabled value="${asig}" ${check}/>`;
+        $asignaturas += "</div>";
+    });
+
+    // Creamos el html combinando toda la información.
+    const html = `
+        <h1>Datos Personales</h1>
+        <div class="personal_data editting">
+            <label for="nombre">
+                <span>Nombre</span>
+                <input type="text" name="nombre" disabled value="${_data.user}"/>
+            </label>
+            <label for="email">
+                <span>Email</span>
+                <input type="text" name="email" disabled value="${_data.email}"/>
+            </label>
+            <label for="priv">
+                <span>Privilegio</span>
+                <input type="text" name="priv" disabled value="${_data.priv}"/>
+            </label>
+            <label for="asignaturas">
+                <span>Asignaturas de interes</span>
+                <div class="asignaturas">
+                    ${$asignaturas}
+                </div>
+            </label>
+            <label for="extra">
+                <span>Datos Extras</span>
+                <input type="text" name="extra" disabled value="${_data.extras}" placeholder="..." />
+            </label>
+            <label for="notify">
+                <span>Recibir notificaciones de las asignaturas</span>
+                <input type="checkbox" name="notify" value="true" ${$notify} disabled>
+            </label>
+            <div class="botones">
+                <button class="edit_btn" type="button">Editar información</button>
+                <button class="confirm_btn hidden"type="button">Confirmar</button>
+                <button class="cancel_btn hidden"type="button">Cancelar</button>
+            </div>
+        </div>
+    `;
+
+    // Devolvemos el html generado
+    return html;
 }
 
 function DisplayFiles(files) {
@@ -676,4 +896,5 @@ function ShowMsg(msg) {
     }, 5000)
 }
 //////////////// CUERPO
-HandleHomeBtn();
+// HandleHomeBtn();
+HandlePfpBtn();

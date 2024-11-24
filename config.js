@@ -31,13 +31,13 @@ const db_tables = [
 ]
 
 const UserSchema = z.object({
-    user: z.string({ message: "Se requiere el usuario" }).min(5, { message: "El usuario debe ser mayor de 5 carácteres" }),
+    user: z.string({ message: "Se requiere el usuario" }).min(4, { message: "El usuario debe ser mayor de 5 carácteres" }),
     email: z.string({message: "Se requiere un email"}).email({message: "El email no es válido"}),
     priv: z.enum(["user", "admin", "master"]).catch("user"),
-    asignaturas: z.array().catch([]),
+    asignaturas: z.array(z.string()).catch([]),
     extras: z.string().optional().default(""),
     notify: z.boolean().catch(false)
-});
+}).strict();
 
 export const ValidateUser = (UserObject) => {
     const resultado = UserSchema.safeParse(UserObject);

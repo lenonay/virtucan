@@ -22,6 +22,7 @@ export class LocalDB {
         }
 
         const user_data = {
+            id: DBuser.id,
             user: DBuser.user,
             priv: DBuser.priv
         }
