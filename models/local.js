@@ -4,6 +4,7 @@ import { JSONFilePreset } from "lowdb/node";
 
 import { ValidateQueja } from "../utils/validate.js";
 import { EnviarMail } from "./mail.js";
+import { NotifyMembers } from "../utils/notify.js";
 
 
 export class LocalDB {
@@ -39,6 +40,11 @@ export class LocalDB {
 
         // Lo metemos a la db
         await db.update(({ quejas }) => { quejas.push(queja) });
+
+        // Notificamos a los usuarios pertinentes
+        if(body.asignatura){
+            NotifyMembers(body.asignatura, body);
+        }
 
         // Enviar el correo
         const MailResult = await EnviarMail(body);
