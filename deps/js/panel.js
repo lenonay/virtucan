@@ -126,6 +126,8 @@ async function HandleHomeBtn(event) {
     if (!quejas || quejas.length === 0) {
         contenedor.innerHTML = "<h3>Hoy no hay quejas</h3>"
     } else {
+        quejas.reverse();
+
         quejas.forEach(queja => {
             const { id, time, titulo, motivo } = queja
             const elemento = `
@@ -144,6 +146,8 @@ async function HandleHomeBtn(event) {
     // Añadimos los elementos
     $cont1.appendChild(titulo);
     $cont1.appendChild(contenedor);
+    $cont2.innerHTML = "<h1>Estadísticas</h1>";
+    $cont3.innerHTML = "<h1>Almacenamiento consumido</h1>"
 
     // Buscamos todas las quejas
     const $quejas = document.querySelectorAll(".queja");
@@ -541,7 +545,7 @@ function CreatePersonalDataHTML(_data) {
 function DisplayFiles(files) {
     // Si la longitud es cero mostrar que no hay nada
     if (files.length === 0) {
-        $cont1.innerHTML = "<h1>No hay archivos adjuntos</h1>"
+        $cont1.innerHTML = "<h3>No hay archivos adjuntos</h3>"
         return;
     }
 
@@ -915,4 +919,4 @@ function ShowMsg(msg) {
 }
 //////////////// CUERPO
 // HandleHomeBtn();
-HandlePfpBtn();
+HandleHomeBtn();
