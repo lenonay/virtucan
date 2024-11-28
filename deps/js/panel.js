@@ -35,6 +35,7 @@ btn_home.addEventListener("click", HandleHomeBtn);
 btn_quejas.addEventListener("click", HandleQuejasBtn);
 btn_storage.addEventListener("click", HandleStorageBtn);
 btn_stats.addEventListener("click", HandleStatsBtn);
+btn_users.addEventListener("click", HandleUsersBtn);
 
 btn_pfp.addEventListener("click", HandlePfpBtn);
 btn_logoff.addEventListener("click", Logoff);
@@ -240,6 +241,10 @@ function HandleStatsBtn(event) {
     $cont1.insertAdjacentHTML("beforeend",svgs.code(200));
 }
 
+function HandleUsersBtn(event){
+    PrepareViewer("users", btn_users);
+}
+
 async function HandlePfpBtn(event) {
     PrepareViewer("pfp", btn_pfp);
 
@@ -256,11 +261,25 @@ async function HandlePfpBtn(event) {
     const $datos = (datos_personales)
         ? CreatePersonalDataHTML(datos_personales)
         : "<h1>Datos Personales</h1><h3>No se han podido cargar los datos</h3>"
-        ;
+    ;
+
+    const $botones = `
+        <div class="account_btns">
+            <button class="change_pass_btn" type="button">
+                <span>Cambiar contraseña</span>
+            </button>
+            <button class="restart_pfp_btn" type="button">
+                <span>Reiniciar foto de perfil</span>
+            </button>
+            <button class="delete_account_btn" type="button">
+                <span>Borrar cuenta</span>
+            </button>
+        </div>
+    `;
 
     $cont1.innerHTML = pfp_img;
     $cont2.innerHTML = $datos;
-    $cont3.innerHTML = "<h1>Botones</h1>";
+    $cont3.innerHTML = $botones;
     $cont4.innerHTML = "<h1>Acciones recientes</h1>";
 
     // Elementos
@@ -270,10 +289,15 @@ async function HandlePfpBtn(event) {
     const edit_btn = document.querySelector(".edit_btn");
     const confirm_btn = document.querySelector(".confirm_btn");
     const cancel_btn = document.querySelector(".cancel_btn");
+    const change_pass_btn = document.querySelector(".change_pass_btn");
+    const restart_pfp_btn = document.querySelector(".restart_pfp_btn");
+    const delete_account_btn = document.querySelector(".delete_account_btn");
 
     // Eventos
     $pfp_img.addEventListener("click", () => { $inp_pfp.click() });
     $inp_pfp.addEventListener("change", UploadPFP);
+    // Eventos de botones
+    restart_pfp_btn.addEventListener("click", RestartPFP);
 
     if (edit_btn) {
         edit_btn.addEventListener("click", EditPersonalData);
@@ -282,6 +306,39 @@ async function HandlePfpBtn(event) {
         confirm_btn.addEventListener("click", UpdatePersonalData);
     }
 
+}
+
+async function RestartPFP(event){
+    // Creamos la alerta
+    CreateAlert($cont3);
+
+    // Recueramos el boton de continuar
+    const continuar_btn = document.querySelector(".continuar_btn");
+
+    continuar_btn.addEventListener("click", async () =>{
+        // Cerramos la alerta
+        CloseDisplay();
+
+        // Mandamos la petición de borrar
+        const peticion = await fetch(`${base_domain}/files/pfp`,{
+            method: "DELETE"
+        });
+
+        // Obtenemos el resultado de la oepracion
+        const resultado = (peticion.ok) ? await peticion.json() : null;
+
+        // Si hubo un error lo mostramos y salimos
+        if(resultado.status !== "OK"){
+            ShowMsg({type: "error", msg: resultado.error});
+            return;
+        }
+
+        // Recargamos la foto de perfil
+        ReloadPFP();
+
+        // Mostramos mensaje de éxito
+        ShowMsg({type: "success", msg: "Se ha reiniciado la foto de perfil"});
+    })
 }
 
 async function UploadPFP(event) {
@@ -929,4 +986,4 @@ function ShowMsg(msg) {
 }
 //////////////// CUERPO
 // HandleHomeBtn();
-HandleHomeBtn();
+HandlePfpBtn()

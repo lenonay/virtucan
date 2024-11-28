@@ -3,7 +3,7 @@ import multer from "multer";
 import path from "node:path";
 
 import { authorize } from "../middlewares/authorize.js";
-import { FilesController } from "../controller/FilesController.js";
+import { FilesController, Delete_User_PFP } from "../controller/FilesController.js";
 
 import { UPLOAD_ROUTE, allowed_exts } from "../config.js";
 
@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
         const ext = path.extname(file.originalname);
 
         // Borramos los ficheros anteriores
-        FilesController.Delete_User_PFP(id);
+        Delete_User_PFP(id);
 
         cb(null, "pfp-" + id + ext);
     }
@@ -57,6 +57,8 @@ FilesRouter.delete("/attachemnts/:id", FilesController.DeleteFile);
 FilesRouter.get("/pfp", FilesController.Get_PFP);
 
 FilesRouter.post("/pfp", pfp_upload.single("new_pfp"), FilesController.Upload_User_PFP);
+
+FilesRouter.delete("/pfp", FilesController.DeleteOwnPFP)
 
 FilesRouter.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {

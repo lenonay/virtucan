@@ -43,24 +43,21 @@ export class FilesController {
         res.sendFile(path, { root: "./" });
     }
 
-    static Delete_User_PFP(id) {
+    static DeleteOwnPFP(req, res) {
+        // Sacamos la id de la petición
+        const { id } = req.session;
 
-        // Recuperamos todos los archivos de la ruta
-        const dirElements = fs.readdirSync(UPLOAD_ROUTE);
+        // Eliminamos el usuario
+        const operacion = Delete_User_PFP(id);
 
-        // Filtramos por los que contienen el nombre del usuario
-        const filtered = dirElements.filter(elemento => elemento.includes(id));
+        // Si la operación no salio existosa mandamos error
+        if(!operacion){
+            res.send({status: "error", error: "No se pudo eliminar la foto"});
+            return;
+        }
 
-        // Si no hay ninguno salimos
-        if (!filtered) return;
-
-        filtered.forEach(file => {
-            const path = UPLOAD_ROUTE + file;
-            try {
-                fs.unlinkSync(path);
-            } catch { }
-        });
-
+        // De resto enviamos un OK
+        res.send({status: "OK"});
     }
 
     static Upload_User_PFP(req, res) {
@@ -115,4 +112,24 @@ export class FilesController {
             res.send({ status: "error", msg: "El archivo no se pudo eliminar" });
         }
     }
+}
+
+export function Delete_User_PFP(id) {
+    // Recuperamos todos los archivos de la ruta
+    const dirElements = fs.readdirSync(UPLOAD_ROUTE);
+
+    // Filtramos por los que contienen el nombre del usuario
+    const filtered = dirElements.filter(elemento => elemento.includes(id));
+
+    // Si no hay ninguno salimos
+    if (!filtered) return;
+
+    filtered.forEach(file => {
+        const path = UPLOAD_ROUTE + file;
+        try {
+            fs.unlinkSync(path);
+        } catch { }
+    });
+
+    return true;
 }
