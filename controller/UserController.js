@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { JSONFilePreset } from "lowdb/node";
 
 import { JWT_PASS, ValidateUser } from "../config.js";
+import { RegisterAction } from "../utils/actions.js";
 
 export class UserController {
     static async GetUserInfo(req, res) {
@@ -80,6 +81,12 @@ export class UserController {
             await db.write();
 
             res.send({ status: "OK" });
+
+            RegisterAction({
+                userID: userDB.id,
+                msg: `${data.user} hizo cambios en sus datos`
+            });
+
         } catch {
             res.send({ status: "error", error: "No se pudo enviar los datos" });
         }

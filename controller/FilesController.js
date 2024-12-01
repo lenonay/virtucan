@@ -2,6 +2,7 @@ import fs from "node:fs";
 
 import { UPLOAD_ROUTE } from "../config.js";
 import { CreatePFP } from "../models/createPFP.js";
+import { RegisterAction } from "../utils/actions.js";
 
 export class FilesController {
     static Get_PFP(req, res) {
@@ -45,7 +46,7 @@ export class FilesController {
 
     static DeleteOwnPFP(req, res) {
         // Sacamos la id de la petición
-        const { id } = req.session;
+        const { id, user } = req.session;
 
         // Eliminamos el usuario
         const operacion = Delete_User_PFP(id);
@@ -58,6 +59,11 @@ export class FilesController {
 
         // De resto enviamos un OK
         res.send({status: "OK"});
+
+        RegisterAction({
+            userID: id,
+            msg: `${user} ha borrado su foto de perfil`
+        });
     }
 
     static Upload_User_PFP(req, res) {
@@ -68,6 +74,11 @@ export class FilesController {
         }
 
         res.json({ status: "OK", filaname: req.file.filaname });
+
+        RegisterAction({
+            userID: req.session.id,
+            msg: `${req.session.user} ha subido una foto de perfil`
+        });
     }
 
     static Get_Attach(req, res) {

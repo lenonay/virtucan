@@ -1,9 +1,12 @@
 import { JSONFilePreset } from "lowdb/node";
+
+import { RegisterAction } from "../utils/actions.js";
+
 const date_rgx = /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2}$/;
 
 
 export class PanelController {
-    static async QuejasByDate(req, res) {
+    static async GetQuejas(req, res) {
         const db = await JSONFilePreset("./db.json", { quejas: [] });
 
         // Recuperamos una copia de la db 
@@ -15,6 +18,11 @@ export class PanelController {
         // Filtramos por ID
         if (id) {
             quejas = quejas.filter(quejas => quejas.id === id);
+
+            RegisterAction({
+                userID: req.session.id,
+                msg: `${req.session.user} vió una queja`
+            });
         }
 
         // Si hay fecha filtramos por ella
@@ -56,5 +64,10 @@ export class PanelController {
         await db.write();
 
         res.send({ status: "OK", msg: "Se ha eliminado la queja" });
+
+        RegisterAction({
+            userID: req.session.id,
+            msg: `${req.session.user} eliminó una queja`
+        });
     }
 }

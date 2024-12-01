@@ -27,7 +27,8 @@ export const allowed_exts = [
 
 // Las tablas que contiene la db local 
 const db_tables = [
-    "users", "quejas"
+    "users", "quejas",
+    "acciones"
 ]
 
 const UserSchema = z.object({

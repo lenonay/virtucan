@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { LocalDB } from "../models/localDB.js";
 import { JWT_PASS } from "../config.js";
 import { ValidateCSRF } from "../utils/ValidateCSRF.js";
+import { RegisterAction } from "../utils/actions.js";
 
 export class LoginController {
     static async Login(req, res) {
@@ -50,6 +51,11 @@ export class LoginController {
             })
             .send({ status: "OK", msg: "Atenticación correcta" })
         ;
+
+        RegisterAction({
+            userID: DBresult.user_data.id,
+            msg: `${DBresult.user_data.user} ha iniciado sesión`
+        });
     }
 
     static async Logoff(req, res){

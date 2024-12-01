@@ -11,6 +11,6 @@ PanelRouter.get("/", (req, res) => {
     res.sendFile("panel.html", { root: "./views" });
 });
 
-PanelRouter.get("/quejas", PanelController.QuejasByDate);
+PanelRouter.get("/quejas", PanelController.GetQuejas);
 
 PanelRouter.delete("/quejas/:id", PanelController.DeleteQueja);
