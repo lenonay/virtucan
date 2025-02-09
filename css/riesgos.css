@@ -1,0 +1,61 @@
+.section {
+  padding: 30px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.riesgos {
+
+  & .card {
+    margin-top: 30px;
+  }
+}
+
+hr {
+  width: 90%;
+  height: 4px;
+  border-radius: 20px;
+  border: none;
+  background: var(--t-a40);
+  justify-self: center;
+  margin-top: 5px;
+}
+
+.ataques {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 30px;
+
+  & h3 {
+    align-self: center;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    & img {
+      margin-top: 20px;
+      align-self: center;
+      max-width: 60%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 0 10px var(--t-a40);
+    }
+
+    & small {
+      align-self: center;
+
+      & a {
+        color: var(--t-a40);
+        font-style: italic;
+      }
+      
+    }
+  }
+}

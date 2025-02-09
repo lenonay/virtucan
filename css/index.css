@@ -120,6 +120,11 @@ footer {
 
   & p {
     font-size: 22px;
+
+    & span {
+      font-weight: 600;
+      color: var(--p-a10);
+    }
   }
 }
 
