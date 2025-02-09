@@ -1,0 +1,29 @@
+:root {
+  /** Base */
+  --dark: #222222;
+  --light: #e0e0e0;
+
+  /** Colores primarios */
+  --p-a0: #813d9c;
+  --p-a10: #9052a7;
+  --p-a20: #9e68b2;
+  --p-a30: #ac7cbd;
+  --p-a40: #ba92c8;
+  --p-a50: #c8a7d3;
+
+  /** Fondos normales */
+  --b-a0: #121212;
+  --b-a10: #282828;
+  --b-a20: #3f3f3f;
+  --b-a30: #575757;
+  --b-a40: #717171;
+  --b-a50: #8b8b8b;
+
+  /** Fondos con tono primario */
+  --t-a0: #271c2b;
+  --t-a10: #3c313f;
+  --t-a20: #514754;
+  --t-a30: #685f6b;
+  --t-a40: #7f7882;
+  --t-a50: #979199;
+}
