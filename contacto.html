@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtucan - Página Princial</title>
+    <link rel="stylesheet" href="css/colors.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/contacto.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="/">
+          <img src="images/new_logo.jpeg" alt="logo" />
+        </a>
+        <span>Virtucan</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="./ataques.html">Ataques</a></li>
+          <li><a href="./servicios.html">Servicios</a></li>
+          <li><a href="./planes.html">Planes</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section localizacion">
+        <h2>Localización y Contacto</h2>
+        <div class="localizacion-container">
+          <!-- Mapa interactivo -->
+          <div class="mapa">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3508.8793595557654!2d-16.300868823749997!3d28.422896875779745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xc41cd2aae73bad5%3A0x2563001b43930438!2sC.%20Decano%20Consular%20Jesus%20Ramos%20Gonz%C3%A1lez%2C%2038111%2C%20Santa%20Cruz%20de%20Tenerife!5e0!3m2!1ses!2ses!4v1739184491943!5m2!1ses!2ses"
+              width="600"
+              height="450"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+
+          <!-- Formulario de contacto -->
+          <div class="contacto-formulario">
+            <form action="ruta-de-procesamiento" method="post">
+              <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  placeholder="Tu nombre"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="tu@correo.com"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="mensaje">Mensaje</label>
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  rows="4"
+                  placeholder="Escribe aquí tu mensaje"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="button">Enviar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-container">
+        <p>Copyright 2025 <span>©</span> Virtucan S.L.</p>
+        <p class="footer-disclaimer">
+          La empresa es ficticia y este sitio web ha sido creado únicamente como
+          proyecto.
+        </p>
+        <div class="footer-social">
+          <a
+            href="https://github.com/lenonay/virtucan"
+            target="_blank"
+            aria-label="GitHub"
+          >
+            <img src="images/github-icon.svg" alt="Icono de Facebook" />
+          </a>
+          <a href="https://x.com/virtucan" target="_blank" aria-label="Twitter">
+            <img src="images/twitter-icon.svg" alt="Icono de Twitter" />
+          </a>
+          <a href="#" target="_blank" aria-label="LinkedIn">
+            <img src="images/linkedin-icon.svg" alt="Icono de LinkedIn" />
+          </a>
+        </div>
+        <nav class="footer-nav">
+          <ul>
+            <li><a href="./contacto.html">Contacto</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Términos y Condiciones</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
